@@ -1,0 +1,80 @@
+<div class="teacher-form-container">
+  <div class="form-header">
+    <h1>{{ isEditing ? 'Edit' : 'Add' }} Teacher</h1>
+    <p>{{ isEditing ? 'Update Teacher Detail' : 'Add Teacher Detail' }}</p>
+  </div>
+
+  <div class="teacher-card">
+    <div class="card-title">Teacher Information</div>
+    <form [formGroup]="teacherForm">
+      <div class="basic-information">
+        <div>Basic Information</div>
+        <div class="">
+          <label for="firstName">Full Name</label>
+          <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
+        </div>
+        <div class="">
+          <label for="email">Email</label>
+          <input formControlName="email" pInputText placeholder="Enter email" type="text"/>
+        </div>
+        <div class="">
+          <label for="phone">Phone Number</label>
+          <input formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
+        </div>
+        <div class="">
+          <label for="status">Status</label>
+          <p-select class="w-full md:w-56" [options]="status"
+                    optionLabel="name" optionValue="value" placeholder="Select Status" formControlName="status"/>
+        </div>
+        <div class="">
+          <label for="salary">Salary</label>
+          <input formControlName="salary" pInputText placeholder="Salary of Teacher" type="number"/>
+        </div>
+      </div>
+
+      <div class="other-information">
+        <div>Other Information</div>
+        <div class="">
+          <label for="nationalId">National ID:</label>
+          <input formControlName="nationalId" pInputText placeholder="Enter National ID" type="text"/>
+        </div>
+        <div class="">
+          <label for="education">Education</label>
+          <input formControlName="education" pInputText placeholder="Enter Education level" type="text"/>
+        </div>
+        <div class="">
+          <label for="experience">Experience</label>
+          <input formControlName="experience" pInputText placeholder="Enter Experience" type="text"/>
+        </div>
+        <div class="">
+          <label for="address">Address</label>
+          <input formControlName="address" pInputText placeholder="Enter address" type="text"/>
+        </div>
+        <div class="">
+          <label for="gender">Gender</label>
+          <p-select class="w-full md:w-56" [options]="gender"
+                    optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="gender"/>
+        </div>
+        <div class="">
+          <label for="religion">Religion</label>
+          <p-select class="w-full md:w-56" [options]="religion"
+                    optionLabel="name" optionValue="value" placeholder="Select Religion" formControlName="religion"/>
+        </div>
+        <div class="">
+          <label for="bloodGroup">Blood Group</label>
+          <p-select class="w-full md:w-56" [options]="bloodGroup"
+                    optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="bloodGroup"/>
+        </div>
+        <div class="">
+          <label>Date of Birth<span class="required">*</span></label>
+          <p-datePicker formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
+        </div>
+
+      </div>
+      <div class="submit-container">
+        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+                  styleClass="w-full mx-auto" [disabled]="teacherForm.invalid"/>
+      </div>
+    </form>
+  </div>
+</div>

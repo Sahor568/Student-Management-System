@@ -1,0 +1,18 @@
+.toggle-btn {
+  background: var(--primary-bg-color);
+  color: var(--primary-text-color);
+  padding: 10px;
+  margin: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.header-component {
+  display: flex;
+  flex-direction: column;
+  padding-left: 256px;
+  //border-right: 1px solid #e5e5e5;
+  position: fixed;
+  //width: 100%;
+  top: 0;
+  left: 0;
+}

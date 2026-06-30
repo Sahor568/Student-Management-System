@@ -1,0 +1,20 @@
+<app-confirm-dialog
+  #confirmDialog
+  message="Are you sure you want to delete this teacher?"
+  header="Delete Teacher"
+  acceptLabel="Delete"
+  acceptSeverity="danger"
+  (accept)="onDeleteAccept()"
+  (reject)="onDeleteReject()" )
+/>
+
+<div class="teacher-list">
+  <app-table
+    [data]="teachers()"
+    [columns]="columns"
+    emptyMessage="No teachers found."
+    (viewItem)="onView($event)"
+    (editItem)="onEdit($event)"
+    (deleteItem)="confirmDelete($event)"
+  />
+</div>

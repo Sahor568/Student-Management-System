@@ -1,0 +1,110 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "role": "admin",
+      "firstName": "Main",
+      "lastName": "Admin",
+      "email": "admin@admin.com",
+      "password": "111111"
+    },
+    {
+      "firstName": "kalidasscsaca adcaxs",
+      "lastName": "bahadurxsa",
+      "email": "admin@sms.com",
+      "password": "123456",
+      "role": "admfvicn",
+      "id": "3"
+    },
+    {
+      "id": "2",
+      "firstName": "Admin",
+      "lastName": "Dass",
+      "email": "admin@sms.com",
+      "password": "123456",
+      "role": "studenr"
+    },
+    {
+      "id": "33",
+      "firstName": "Admin",
+      "lastName": "Dass",
+      "email": "admin@sms.com",
+      "password": "123456",
+      "role": "fds"
+    },
+    {
+      "firstName": "Sujal",
+      "lastName": "Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "password": "222222",
+      "id": "345"
+    }
+  ],
+  "teachers": [
+    {
+      "userId": 1,
+      "firstName": "Sujalm",
+      "lastName": "Dahalfd",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "Active",
+      "id": "57uuhML0Zdg"
+    },
+    {
+      "userId": 5,
+      "firstName": "Sujal",
+      "lastName": "Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "Active",
+      "id": "cQ-JRYdvtJo"
+    },
+    {
+      "userId": 6,
+      "firstName": "ds",
+      "lastName": "Dahalds",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "UnActive",
+      "id": "deQNu9nKMYI"
+    },
+    {
+      "id": "p6zhxGjORfc",
+      "userId": 7,
+      "firstName": "Sujal",
+      "lastName": "Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "Active",
+      "createdDate": "2026-06-30"
+    },
+    {
+      "id": "XJrr37LxVq4",
+      "userId": 8,
+      "firstName": "Sujal",
+      "lastName": "Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "Active",
+      "createdDate": "2026-06-30"
+    },
+    {
+      "id": "wiZD8LptO6w",
+      "userId": 9,
+      "fullName": "Sujal Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "defgb",
+      "status": "Active",
+      "createdDate": "2026-06-30"
+    }
+  ],
+  "students": [],
+  "classes": [],
+  "attendance": [],
+}

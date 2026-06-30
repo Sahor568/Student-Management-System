@@ -1,0 +1,50 @@
+<div class="login-container">
+  <form [formGroup]="loginForm">
+    <div class="title">
+      <h1>Login</h1>
+    </div>
+    <p>Enter your credentials to access your<br>Student Management System</p>
+    <div class="flex flex-col gap-2">
+      <label for="username">Email</label>
+      <input formControlName="email" pInputText placeholder="Enter your email ..." type="text" />
+    </div>
+    <div class="error-text">
+      @if (email?.invalid && (email?.dirty || email?.touched)) {
+        <span> @if (email?.errors?.['required']) {
+          Email is required.
+        }
+          @if (email?.errors?.['pattern']) {
+            Invalid email format.
+          }
+        </span>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="password">Password</label>
+      <input formControlName="password" pInputText placeholder="Enter your Password ..." type="password" />
+    </div>
+    <div class="error-text">
+      @if (password?.invalid && (password?.dirty || password?.touched)) {
+        <span> @if (password?.errors?.['required']) {
+          Password is required.
+        }
+          @if (password?.errors?.['minlength']) {
+            Password must be at least 6 characters long.
+          }
+        </span>
+      }
+    </div>
+
+    <div class="submit-container">
+      <p-button (click)="onSubmit()" label="Login" icon="pi pi-user" styleClass="w-full mx-auto"
+                [disabled]="loginForm.invalid" />
+    </div>
+    <div class="suggestion">
+      <p>
+        Don't have an account?<br>
+        Ask Your Admin/Teacher for an account...
+      </p>
+    </div>
+  </form>
+</div>
