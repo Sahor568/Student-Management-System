@@ -5,13 +5,10 @@ import { InputText } from 'primeng/inputtext';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { Select } from 'primeng/select';
-import { StatusInterface } from '../../types/status.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TeacherInterface } from '../../../../shared/types/teacher.interface';
-import { GenderInterface } from '../../../../shared/types/gender.interface';
-import { ReligionInterface } from '../../../../shared/types/religion.interface';
-import { BloodGroupInterface } from '../../../../shared/types/blood-group.interface';
+import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { DatePicker } from 'primeng/datepicker';
+import { INameValue } from '../../../../shared/types/name-Value.interface';
 
 @Component({
   selector: 'app-teacher-form',
@@ -20,11 +17,11 @@ import { DatePicker } from 'primeng/datepicker';
   styleUrl: './teacher-form.scss',
 })
 export class TeacherForm implements OnInit {
-  teacher!: TeacherInterface;
-  status!: StatusInterface[];
-  gender!: GenderInterface[];
-  religion!: ReligionInterface[];
-  bloodGroup!: BloodGroupInterface[];
+  teacher!: ITeacher;
+  status!: INameValue[];
+  gender!: INameValue[];
+  religion!: INameValue[];
+  bloodGroup!: INameValue[];
   router = inject(Router);
   private route = inject(ActivatedRoute);
   isEditing = false;
@@ -36,7 +33,7 @@ export class TeacherForm implements OnInit {
     fullName: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
-    salary: new FormControl('', Validators.required),
+    monthlySalary: new FormControl('', Validators.required),
     address: new FormControl(),
     status: new FormControl('', Validators.required),
     nationalId: new FormControl(),
@@ -79,7 +76,7 @@ export class TeacherForm implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
-    this.http.get<TeacherInterface>('http://localhost:3000/teachers/' + teacherId).subscribe({
+    this.http.get<ITeacher>('http://localhost:3000/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher = teacher;
         this.teacherForm.patchValue({
@@ -89,6 +86,14 @@ export class TeacherForm implements OnInit {
           phone: teacher.phone,
           address: teacher.address,
           status: teacher.status,
+          monthlySalary: teacher.monthlySalary,
+          nationalId: teacher.nationalId!,
+          education: teacher.education!,
+          religion: teacher.religion!,
+          gender: teacher.gender!,
+          bloodGroup: teacher.bloodGroup!,
+          experience: teacher.experience!,
+          dob: teacher.dob ? new Date(teacher.dob) : null,
         });
       },
     });
@@ -103,11 +108,11 @@ export class TeacherForm implements OnInit {
   }
 
   createTeacher(): void {
-    this.http.get<TeacherInterface[]>('http://localhost:3000/teachers').subscribe((teachers) => {
+    this.http.get<ITeacher[]>('http://localhost:3000/teachers').subscribe((teachers) => {
       const nextId =
         teachers.length > 0 ? Math.max(...teachers.map((t) => Number(t.userId))) + 1 : 1;
 
-      const newTeacher: TeacherInterface = {
+      const newTeacher: ITeacher = {
         id: 0,
         userId: nextId,
         fullName: this.teacherForm.value.fullName!,
@@ -116,9 +121,17 @@ export class TeacherForm implements OnInit {
         address: this.teacherForm.value.address!,
         status: this.teacherForm.value.status!,
         createdDate: new Date().toISOString(),
+        monthlySalary: this.teacherForm.value.monthlySalary!,
+        nationalId: this.teacherForm.value.nationalId!,
+        education: this.teacherForm.value.education!,
+        religion: this.teacherForm.value.religion!,
+        gender: this.teacherForm.value.gender!,
+        bloodGroup: this.teacherForm.value.bloodGroup!,
+        experience: this.teacherForm.value.experience!,
+        dob: this.teacherForm.value.dob!,
       };
 
-      this.http.post<TeacherInterface>('http://localhost:3000/teachers', newTeacher).subscribe({
+      this.http.post<ITeacher>('http://localhost:3000/teachers', newTeacher).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Teacher Status', 'Teacher Created successfully!');
           this.router.navigate(['/teachers']);
@@ -130,7 +143,7 @@ export class TeacherForm implements OnInit {
   editTeacher(): void {
     const teacherId = this.route.snapshot.paramMap.get('id');
     this.http
-      .put<TeacherInterface>(`http://localhost:3000/teachers/${teacherId}`, this.teacherForm.value)
+      .put<ITeacher>(`http://localhost:3000/teachers/${teacherId}`, this.teacherForm.value)
       .subscribe({
         next: (updated) => {
           this.toastService.showToast('success', 'Status', 'Teacher Updated successfully!');

@@ -1,11 +1,11 @@
 <div class="table-container">
   @if (data.length > 0) {
-    <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" removableSort [paginator]="true" [rows]="5"
-             [rowsPerPageOptions]="[5, 10, 20]" class="table">
+    <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" removableSort [paginator]="true" [rows]="10"
+             [rowsPerPageOptions]="[10, 25, 50]" class="table">
       <ng-template #header>
         <tr>
           @for (col of columns; track col.field) {
-            <th [pSortableColumn]="col.field">
+            <th [pSortableColumn]="col.field" >
               {{ col.header }}
               <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>

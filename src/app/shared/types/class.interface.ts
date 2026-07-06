@@ -1,4 +1,4 @@
-export interface classInterface {
+export interface IClass{
   id: number;
   className: string;
   section: string;

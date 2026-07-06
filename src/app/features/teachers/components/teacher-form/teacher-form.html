@@ -10,25 +10,25 @@
       <div class="basic-information">
         <div>Basic Information</div>
         <div class="">
-          <label for="firstName">Full Name</label>
+          <label for="fullName">Full Name:</label>
           <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
         </div>
         <div class="">
-          <label for="email">Email</label>
+          <label for="email">Email:</label>
           <input formControlName="email" pInputText placeholder="Enter email" type="text"/>
         </div>
         <div class="">
-          <label for="phone">Phone Number</label>
+          <label for="phone">Phone Number:</label>
           <input formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
         </div>
         <div class="">
-          <label for="status">Status</label>
+          <label for="status">Status:</label>
           <p-select class="w-full md:w-56" [options]="status"
                     optionLabel="name" optionValue="value" placeholder="Select Status" formControlName="status"/>
         </div>
         <div class="">
-          <label for="salary">Salary</label>
-          <input formControlName="salary" pInputText placeholder="Salary of Teacher" type="number"/>
+          <label for="salary">Monthly Salary:</label>
+          <input formControlName="monthlySalary" pInputText placeholder="Monthly Salary of Teacher" type="number"/>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
                     optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="bloodGroup"/>
         </div>
         <div class="">
-          <label>Date of Birth<span class="required">*</span></label>
+          <label for="dob">Date of Birth<span class="required">*</span>:</label>
           <p-datePicker formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
         </div>
 

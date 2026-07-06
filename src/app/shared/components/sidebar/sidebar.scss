@@ -9,6 +9,8 @@
   top: 0;
   left: 0;
   background: var(--primary-bg-color);
+
+
 }
 
 .title {
@@ -17,7 +19,6 @@
   padding: 16px 16px;
   border-bottom: 1px solid #ddd;
   //letter-spacing: 0.01em;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +26,7 @@
 
 .menu {
   list-style: none;
-  padding: 12px 0;
+  //padding: 12px 0;
   flex: 1;
 }
 
@@ -80,4 +81,16 @@
 .btn-logout:hover {
   background-color: #f0f0f0;
   color: #111;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+
+  img {
+    max-width: 150px;
+    max-height: 150px;
+  }
 }

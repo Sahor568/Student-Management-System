@@ -16,7 +16,7 @@ export class AppTable<T extends { id: number }> {
   @Input() columns: ColumnDefInterface[] = [];
   @Input() emptyMessage: string = 'No records found.';
 
-  @Output() deleteItem = new EventEmitter<number>();
+  @Output() deleteItem = new EventEmitter<T>();
   @Output() editItem = new EventEmitter<T>();
   @Output() viewItem = new EventEmitter<T>();
 }

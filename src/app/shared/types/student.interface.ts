@@ -1,30 +1,31 @@
-export interface StudentInterface {
+export interface IStudent {
   // student information
   id: number;
+  userId: number;
   fullName: string;
   registrationNumber: number;
-  dateOfAdmission: number;
-  classId: number;
+  dateOfAdmission: string;
+  // classId: number;
 
   // other information
   email: string;
-  dateOfBirth: string;
+  dob: string;
   gender: number;
   phone: number;
   address: string;
   bloodGroup: string;
   orphanStudent: string;
-  religion: number;
+  religion: string;
   createdAt: string;
   updatedAt: string;
 
   // father/guardian information
-  guardianName: string;
   guardian: string;
+  guardianName: string;
   guardianNationalId: number;
   guardianPhone: number;
   guardianEmail: string;
+  guardianAddress: string;
   guardianProfession: string;
-  guardianIncome: string;
-
+  guardianIncome: number;
 }

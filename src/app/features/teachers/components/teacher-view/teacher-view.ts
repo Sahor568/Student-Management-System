@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { TeacherInterface } from '../../../../shared/types/teacher.interface';
+import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { ConfirmDialog } from '../../../../shared/components/reusables/confirm-dialog/confirm-dialog';
+import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-teacher-view',
@@ -13,7 +13,7 @@ import { ConfirmDialog } from '../../../../shared/components/reusables/confirm-d
   styleUrl: './teacher-view.scss',
 })
 export class TeacherView implements OnInit {
-  teacher = signal<TeacherInterface | null>(null);
+  teacher = signal<ITeacher | null>(null);
 
   http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -30,7 +30,7 @@ export class TeacherView implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
-    this.http.get<TeacherInterface>('http://localhost:3000/teachers/' + teacherId).subscribe({
+    this.http.get<ITeacher>('http://localhost:3000/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher.set(teacher);
       },
@@ -40,7 +40,7 @@ export class TeacherView implements OnInit {
     });
   }
 
-  deleteTeacher(teacher: TeacherInterface): void {
+  deleteTeacher(teacher: ITeacher): void {
     this.selectedTeacherId = teacher.id;
     this.confirmDialog()?.confirm();
   }
