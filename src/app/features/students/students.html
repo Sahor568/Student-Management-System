@@ -2,7 +2,7 @@
   <div class="student-header">
     <h1>Students</h1>
     <div>
-      <p-button [outlined]="true" label="Add Student" [routerLink]="['/student']" />
+      <p-button [outlined]="true" label="Add Student" (click)="addStudent()" />
     </div>
   </div>
   <app-student-list></app-student-list>

@@ -1,1 +1,37 @@
-<p>class-form works!</p>
+<div class="class-form-container">
+  <div class="form-header">
+    <h1>{{ isEditing ? 'Edit' : 'Add' }} class</h1>
+    <p>{{ isEditing ? 'Update class Detail' : 'Add class Detail' }}</p>
+  </div>
+
+  <div class="class-card">
+    <div class="card-title">Class Information</div>
+    <form [formGroup]="classForm">
+      <div class="basic-information">
+        <div>Basic Information</div>
+        <div class="">
+          <label for="className">Class Name:</label>
+          <input formControlName="className" pInputText placeholder="Enter Class Name" type="text"/>
+        </div>
+        <div class="">
+          <label for="section">section:</label>
+          <input formControlName="section" pInputText placeholder="Enter section Name" type="text"/>
+        </div>
+        <div class="">
+          <label for="teacherId">Teacher</label>
+<!--          <p-select class="w-full md:w-56" [options]="teacher"-->
+<!--                    optionLabel="name" optionValue="value" placeholder="Select Teacher for the Class" formControlName="teacherId"/>-->
+        </div>
+        <div class="">
+          <label for="monthlyTuitionFees">Monthly Tuition Fees:</label>
+          <input formControlName="monthlyTuitionFees" pInputText placeholder="Enter Monthly Tuition fees" type="number"/>
+        </div>
+      </div>
+
+      <div class="submit-container">
+        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+                  styleClass="w-full mx-auto" [disabled]="classForm.invalid"/>
+      </div>
+    </form>
+  </div>
+</div>

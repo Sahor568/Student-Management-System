@@ -1,1 +1,44 @@
-<p>users-view works!</p>
+<app-confirm-dialog
+  #confirmDialog
+  message="Are you sure you want to delete this user?"
+  header="Delete User"
+  acceptLabel="Delete"
+  acceptSeverity="danger"
+  (accept)="onDeleteAccept()"
+/>
+
+<div class="user-view-container">
+  <!--  <div class="form-header">-->
+  <!--    <h1>User Detail</h1>-->
+  <!--    <p>Here you can see the user's details.</p>-->
+  <!--  </div>-->
+
+  <div class="user-card">
+    <div class="card-title">User Information</div>
+
+    <div class="field">
+      <label>User ID: </label>
+      <input [value]="user()?.userId" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Full Name: </label>
+      <input [value]="user()?.fullName" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Email: </label>
+      <input [value]="user()?.email" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Password: </label>
+      <input [value]="user()?.password" disabled/>
+    </div>
+
+    <div class="user-action">
+      <p-button [outlined]="true" label="Edit" [routerLink]="['/user', user()?.id]"/>
+      <p-button [outlined]="true" label="Delete" severity="danger" (click)="deleteUser(user()!)"/>
+    </div>
+  </div>
+</div>

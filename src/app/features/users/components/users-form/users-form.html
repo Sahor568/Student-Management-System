@@ -1,1 +1,35 @@
-<p>users-form works!</p>
+<div class="user-form-container">
+  <div class="form-header">
+    <h1>{{ isEditing ? 'Edit' : 'Add' }} User</h1>
+    <p>{{ isEditing ? 'Update User Detail' : 'Add User Detail' }}</p>
+  </div>
+
+  <div class="user-card">
+    <div class="card-title">User Information</div>
+    <form [formGroup]="userForm">
+      <div class="basic-information">
+        <div class="">
+          <label for="fullName">Full Name:</label>
+          <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
+        </div>
+        <div class="">
+          <label for="role">Role</label>
+          <p-select class="w-full md:w-56" [options]="role"
+                    optionLabel="name" optionValue="value" placeholder="Select Role" formControlName="role"/>
+        </div>
+        <div class="">
+          <label for="email">Email:</label>
+          <input formControlName="email" pInputText placeholder="Enter Email" type="text"/>
+        </div>
+        <div class="">
+          <label for="password">Password:</label>
+          <input formControlName="password" pInputText placeholder="Enter password" type="text"/>
+        </div>
+        <div class="submit-container">
+          <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+                    styleClass="w-full mx-auto" [disabled]="userForm.invalid"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -2,7 +2,7 @@
   <div class="classes-header">
     <h1>Classes</h1>
     <div>
-      <p-button [outlined]="true" label="Add Class" [routerLink]="['/class']" />
+      <p-button [outlined]="true" label="Add Class" (click)="addClass()" />
     </div>
   </div>
   <app-class-list></app-class-list>

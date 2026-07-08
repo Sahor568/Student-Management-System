@@ -1,28 +1,12 @@
 {
   "users": [
     {
-      "id": "1",
-      "userId": 1,
-      "role": "Admin",
-      "fullName": "Main Admin",
-      "email": "admin@admin.com",
-      "password": "111111"
-    },
-    {
-      "fullName": "kalidasscsaca adcaxs",
+      "userId": 3,
+      "fullName": "Kaalu dassss",
       "email": "admin@sms.com",
-      "userId": 2,
       "password": "123456",
       "role": "Student",
-      "id": "3"
-    },
-    {
-      "id": "2",
-      "userId": 3,
-      "fullName": "Kaalu das",
-      "email": "admin@sms.com",
-      "password": "123456",
-      "role": "Student"
+      "id": "2"
     },
     {
       "id": "33",
@@ -39,12 +23,36 @@
       "id": "345",
       "userId": 6,
       "role": "Teacher"
+    },
+    {
+      "id": "id8vl0D7pY8",
+      "userId": 7,
+      "fullName": "dsfvb",
+      "email": "shishirdevkota647@gmail.com",
+      "password": "adsfv b",
+      "role": "adsfv b"
+    },
+    {
+      "userId": 8,
+      "fullName": "Main Admin",
+      "email": "admin@admin.com",
+      "password": "111111",
+      "role": "Admin",
+      "id": "qG0DrgB8H2w"
+    },
+    {
+      "id": "zoqDLF_GXw4",
+      "userId": 9,
+      "fullName": "adsfv",
+      "email": "shishirdevkota647@gmail.com",
+      "password": "21345678",
+      "role": "Teacher"
     }
   ],
   "teachers": [
     {
       "userId": 3,
-      "fullName": "Ramesh Karki",
+      "fullName": "Ramesh Karkidd",
       "email": "ramesh.karki@gmail.com",
       "phone": 9811111113,
       "monthlySalary": 48000,
@@ -250,31 +258,6 @@
   ],
   "students": [
     {
-      "userId": 1,
-      "fullName": "Pratik Shrestha",
-      "registrationNumber": 2025005,
-      "dateOfAdmission": "2025-04-18T10:00:00.000Z",
-      "email": "pratik.shrestha@gmail.com",
-      "dob": "2026-07-08T18:15:00.000Z",
-      "gender": "Male",
-      "phone": 9801234505,
-      "address": "Bhaktapur",
-      "bloodGroup": "A-",
-      "orphanStudent": "No",
-      "religion": "Muslim",
-      "updatedAt": "2025-04-18T10:00:00Z",
-      "guardian": "Father",
-      "guardianName": "Ganesh Shrestha",
-      "guardianNationalId": 12345678905,
-      "guardianPhone": 9811111105,
-      "guardianEmail": "ganesh.shrestha@gmail.com",
-      "guardianAddress": "sector 34",
-      "guardianProfession": "Engineer",
-      "guardianIncome": 95000,
-      "id": "5",
-      "classId": 0
-    },
-    {
       "userId": 2,
       "fullName": "Sujal Dahal",
       "registrationNumber": 12345,
@@ -297,6 +280,56 @@
       "guardianProfession": "defegdhn",
       "guardianIncome": 23456,
       "id": "ncgPI4_8Otc"
+    },
+    {
+      "id": "qyg7WSCXGUk",
+      "userId": 3,
+      "fullName": "sadf",
+      "registrationNumber": null,
+      "dateOfAdmission": null,
+      "email": null,
+      "dob": null,
+      "phone": null,
+      "gender": null,
+      "address": null,
+      "bloodGroup": null,
+      "orphanStudent": null,
+      "religion": null,
+      "createdAt": "2026-07-08T08:16:39.345Z",
+      "updatedAt": "2026-07-08T08:16:39.345Z",
+      "guardian": null,
+      "guardianName": null,
+      "guardianNationalId": null,
+      "guardianPhone": null,
+      "guardianEmail": null,
+      "guardianAddress": null,
+      "guardianProfession": null,
+      "guardianIncome": null
+    },
+    {
+      "id": "8SuXeHdvOaU",
+      "userId": 4,
+      "fullName": "dsfgbhn",
+      "registrationNumber": null,
+      "dateOfAdmission": null,
+      "email": null,
+      "dob": null,
+      "phone": null,
+      "gender": null,
+      "address": null,
+      "bloodGroup": null,
+      "orphanStudent": null,
+      "religion": null,
+      "createdAt": "2026-07-08T10:59:44.185Z",
+      "updatedAt": "2026-07-08T10:59:44.185Z",
+      "guardian": null,
+      "guardianName": null,
+      "guardianNationalId": null,
+      "guardianPhone": null,
+      "guardianEmail": null,
+      "guardianAddress": null,
+      "guardianProfession": null,
+      "guardianIncome": null
     }
   ],
   "classes": [

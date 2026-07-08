@@ -1,13 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Button } from 'primeng/button';
-import { RouterLink } from '@angular/router';
-import { UsersList } from '../users/components/users-list/users-list';
 import { ClassList } from './components/class-list/class-list';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ClassForm } from './components/class-form/class-form';
 
 @Component({
   selector: 'app-classes',
-  imports: [Button, RouterLink, ClassList],
+  imports: [Button, ClassList],
   templateUrl: './classes.html',
   styleUrl: './classes.scss',
 })
-export class Classes {}
+export class Classes {
+  private dialogService = inject(DialogService);
+
+  protected addClass() {
+    this.dialogService.open(ClassForm, {
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+    });
+  }
+}

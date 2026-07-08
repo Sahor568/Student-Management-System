@@ -1,0 +1,91 @@
+.class-form-container {
+  padding: 10px;
+  width: 1000px;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.25rem;
+}
+
+.form-header p {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.class-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.class-card form > div:not(.submit-container) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.class-card label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.class-card input[type="text"],
+.class-card input[type="number"] {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #1e293b;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.class-card input[type="text"]:focus,
+.class-card input[type="number"]:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.class-card input.ng-invalid.ng-touched {
+  border-color: #ef4444;
+}
+
+.class-card input.ng-invalid.ng-touched:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.class-card .p-select {
+  width: 100% !important;
+}
+
+.submit-container {
+  margin-top: 0.5rem;
+}
+
+.submit-container .p-button {
+  width: 100%;
+  padding: 0.7rem;
+  font-weight: 600;
+  border-radius: 8px;
+}

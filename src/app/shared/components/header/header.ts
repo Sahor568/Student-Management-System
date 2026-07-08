@@ -15,9 +15,9 @@ export class Header implements OnInit {
   // isDark = this.themeService.isDarkMode();
   http = inject(HttpClient);
   router = inject(Router);
-  user!: IUser;
-  userName = '';
-  userRole= '';
+  user?: IUser;
+  userName?: string;
+  userRole?: string;
 
   // toggleTheme(): void {
   //   this.themeService.toggleTheme();

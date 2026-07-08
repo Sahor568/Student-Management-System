@@ -7,8 +7,10 @@ import { IUser } from '../../../../shared/types/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ETableActions, IDataTableConfig } from '../../../../shared/components/table/types/ColumnDef.interface';
-import { TeacherView } from '../../../teachers/components/teacher-view/teacher-view';
 import { DialogService } from 'primeng/dynamicdialog';
+import { UsersView } from '../users-view/users-view';
+import { TeacherForm } from '../../../teachers/components/teacher-form/teacher-form';
+import { UsersForm } from '../users-form/users-form';
 
 @Component({
   selector: 'app-users-list',
@@ -52,17 +54,21 @@ export class UsersList implements OnInit {
   }
 
   onView(user: IUser) {
-    this.dialogService.open(TeacherView, {
+    this.dialogService.open(UsersView, {
       data: user.id,
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
     });
-    this.router.navigate(['/user-view', user.id]);
   }
 
   onEdit(user: IUser) {
-    this.router.navigate(['/user', user.id]);
+    this.dialogService.open(UsersForm, {
+      data: user.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+    });
   }
 
   confirmDelete(id: string) {
@@ -83,9 +89,5 @@ export class UsersList implements OnInit {
         },
       });
     }
-  }
-
-  onDeleteReject() {
-    this.toastService.showToast('error', 'Rejected', 'User deletion cancelled.');
   }
 }

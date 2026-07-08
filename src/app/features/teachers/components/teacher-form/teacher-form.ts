@@ -18,7 +18,7 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
   styleUrl: './teacher-form.scss',
 })
 export class TeacherForm implements OnInit {
-  teacher!: ITeacher;
+  teacher?: ITeacher;
   status!: INameValue[];
   gender!: INameValue[];
   religion!: INameValue[];
@@ -143,7 +143,7 @@ export class TeacherForm implements OnInit {
   }
 
   editTeacher(): void {
-    const teacherId = this.route.snapshot.paramMap.get('id');
+    const teacherId = this.config?.data;
     this.http
       .put<ITeacher>(`http://localhost:3000/teachers/${teacherId}`, this.teacherForm.value)
       .subscribe({

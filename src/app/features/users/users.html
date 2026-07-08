@@ -2,7 +2,7 @@
   <div class="user-header">
     <h1>Users</h1>
     <div>
-      <p-button [outlined]="true" label="Add User" [routerLink]="['/user']" />
+      <p-button [outlined]="true" label="Add User" (click)="addUser()" />
     </div>
   </div>
   <app-users-list></app-users-list>

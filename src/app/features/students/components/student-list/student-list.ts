@@ -11,6 +11,7 @@ import { AppTable } from '../../../../shared/components/table/table';
 import { Router } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { StudentView } from '../student-view/student-view';
+import { StudentForm } from '../student-form/student-form';
 
 @Component({
   selector: 'app-student-list',
@@ -64,7 +65,13 @@ export class StudentList implements OnInit {
   }
 
   onEdit(student: IStudent) {
-    this.router.navigate(['/student', student.id]);
+    this.dialogService.open(StudentForm, {
+      data: student.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      // header: 'Edit Teacher Details',
+    });
   }
 
   confirmDelete(id: string) {

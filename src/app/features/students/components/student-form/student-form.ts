@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Select } from 'primeng/select';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-student-form',
@@ -28,6 +29,7 @@ export class StudentForm implements OnInit {
   isEditing = false;
   http = inject(HttpClient);
   toastService = inject(ToastService);
+  config = inject(DynamicDialogConfig);
 
   studentForm = new FormGroup({
     userId: new FormControl(),
@@ -86,7 +88,7 @@ export class StudentForm implements OnInit {
       { name: 'Grand Mother', value: 'Grand Mother' },
     ];
 
-    const studentId = this.route.snapshot.paramMap.get('id');
+    const studentId = this.config?.data;
     if (studentId) {
       this.isEditing = true;
       this.getStudentById(studentId);
@@ -101,7 +103,7 @@ export class StudentForm implements OnInit {
           userId: student.userId,
           fullName: student.fullName,
           registrationNumber: student.registrationNumber,
-          dateOfAdmission: student.dateOfAdmission ? new Date (student.dateOfAdmission) : null,
+          dateOfAdmission: student.dateOfAdmission ? new Date(student.dateOfAdmission) : null,
 
           email: student.email,
           dob: student.dob ? new Date(student.dob) : null,
