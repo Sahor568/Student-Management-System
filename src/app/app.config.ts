@@ -6,6 +6,7 @@ import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +21,8 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     MessageService,
+    DialogService,
+    DynamicDialogConfig,
     ConfirmationService,
     provideHttpClient(), //recent method to http client in angular more than 17+ angular
   ],

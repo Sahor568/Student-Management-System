@@ -1,1 +1,46 @@
-<p>mark-attendance works!</p>
+<div class="mark-attendance-container">
+  <div>
+    <h1>Mark Attendance</h1>
+    <p>Record attendance for a student</p>
+  </div>
+
+  <div>
+    <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
+      <div>
+        <div>
+          <label for="classId">Class:</label>
+          <p-select [options]="classes" optionLabel="className" optionValue="id" placeholder="Select Class" formControlName="classId" styleClass="w-full" />
+          @if (classes.length === 0) {
+            <span>No classes available. Add a class first.</span>
+          }
+        </div>
+        <div >
+          <label for="studentId"> Student:</label>
+          <p-select [options]="filteredStudents" optionLabel="fullName" optionValue="userId" placeholder="Select Student" formControlName="studentId" [showClear]="true" />
+          @if (!attendanceForm.value.classId) {
+            <span>
+              <i></i> Select a class first to see students
+            </span>
+          } @else if (filteredStudents.length === 0) {
+            <span>
+              <i></i> No students assigned to this class
+            </span>
+          }
+        </div>
+        <div>
+          <label for="date">Date:</label>
+          <p-datePicker formControlName="date" dateFormat="dd/mm/yy"/>
+        </div>
+        <div>
+          <label for="status">Status:</label>
+          <p-select [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status" formControlName="status" />
+        </div>
+      </div>
+
+      <div>
+        <p-button type="submit" label="Save Attendance" icon="pi pi-check" [disabled]="attendanceForm.invalid" />
+        <p-button type="button" label="Cancel" icon="pi pi-times" [routerLink]="['/attendance']" />
+      </div>
+    </form>
+  </div>
+</div>

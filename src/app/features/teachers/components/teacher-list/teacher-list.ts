@@ -2,54 +2,67 @@ import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
-import { ColumnDefInterface } from '../../../../shared/components/table/types/ColumnDef.interface';
-import { AppTable } from '../../../../shared/components/table/table';
+import { ETableActions, IDataTableConfig } from '../../../../shared/components/table/types/ColumnDef.interface';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TeacherView } from '../teacher-view/teacher-view';
+import { AppTable } from '../../../../shared/components/table/table';
+import { TeacherForm } from '../teacher-form/teacher-form';
 
 @Component({
   selector: 'app-teacher-list',
   standalone: true,
   imports: [AppTable, ConfirmDialog],
   templateUrl: './teacher-list.html',
+  styleUrl: './teacher-list.scss',
 })
 export class TeacherList implements OnInit {
-  teachers = signal<ITeacher[]>([]);
-  http = inject(HttpClient);
-  router = inject(Router);
-  toastService = inject(ToastService);
-  confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
-  selectedTeacherId: number | null = null;
-
-  columns: ColumnDefInterface[] = [
-    { field: 'userId', header: 'Id' },
-    { field: 'fullName', header: 'Full Name' },
-    { field: 'email', header: 'Email' },
-    { field: 'phone', header: 'Phone' },
-    { field: 'address', header: 'Address' },
-    { field: 'status', header: 'Status' },
-  ];
+  protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
+  protected tableConfig: IDataTableConfig = {
+    columns: [
+      { field: 'userId', header: 'Id' },
+      { field: 'fullName', header: 'Full Name' },
+      { field: 'email', header: 'Email' },
+      { field: 'phone', header: 'Phone' },
+      { field: 'address', header: 'Address' },
+      { field: 'status', header: 'Status' },
+    ],
+    actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+  };
+  protected teachers = signal<ITeacher[]>([]);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private toastService = inject(ToastService);
+  private dialogService = inject(DialogService);
+  private selectedTeacherId?: string;
 
   ngOnInit() {
-    this.http.get<ITeacher[]>('http://localhost:3000/teachers').subscribe({
-      next: (data) =>
-        this.teachers.set(
-          data.map((teacher) => ({
-            ...teacher,
-          })),
-        ),
-    });
+    this.fetchTeachers();
   }
 
   onView(teacher: ITeacher) {
-    this.router.navigate(['/teacher-view', teacher.id]);
+    this.dialogService.open(TeacherView, {
+      data: teacher.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      // header: teacher.fullName,
+      header: "Teacher Details",
+    });
   }
 
   onEdit(teacher: ITeacher) {
-    this.router.navigate(['/teacher', teacher.id]);
+    this.dialogService.open(TeacherForm , {
+      data: teacher.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      // header: 'Edit Teacher Details',
+    });
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(id: string) {
     this.selectedTeacherId = id;
     this.confirmDialog()?.confirm();
   }
@@ -58,14 +71,26 @@ export class TeacherList implements OnInit {
     if (this.selectedTeacherId !== null) {
       this.http.delete(`http://localhost:3000/teachers/${this.selectedTeacherId}`).subscribe({
         next: () => {
-          this.teachers.update((list) => list.filter((t) => t.id !== this.selectedTeacherId));
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
+        },
+        error: (err) => {
+          this.toastService.showToast('error', 'Failed', err);
+        },
+        complete: () => {
+          this.fetchTeachers();
         },
       });
     }
   }
 
-  onDeleteReject() {
-    this.toastService.showToast('error', 'Rejected', 'Teacher deletion cancelled.');
+  private fetchTeachers() {
+    this.http.get<ITeacher[]>('http://localhost:3000/teachers').subscribe({
+      next: (data) =>
+        this.teachers.set(
+          data.map((teacher) => ({
+            ...teacher,
+          })),
+        ),
+    });
   }
 }

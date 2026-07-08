@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-teacher-view',
@@ -14,16 +15,16 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 })
 export class TeacherView implements OnInit {
   teacher = signal<ITeacher | null>(null);
-
   http = inject(HttpClient);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   toastService = inject(ToastService);
+  config = inject(DynamicDialogConfig);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
-  selectedTeacherId: number | null = null;
+  selectedTeacherId?: number;
 
   ngOnInit(): void {
-    const teacherId = this.route.snapshot.paramMap.get('id');
+    const teacherId = this.config?.data;
+    this.selectedTeacherId = teacherId;
     if (teacherId) {
       this.getTeacherById(teacherId);
     }
@@ -54,9 +55,5 @@ export class TeacherView implements OnInit {
         },
       });
     }
-  }
-
-  onDeleteReject() {
-    this.toastService.showToast('error', 'Rejected', 'Teacher deletion cancelled.');
   }
 }

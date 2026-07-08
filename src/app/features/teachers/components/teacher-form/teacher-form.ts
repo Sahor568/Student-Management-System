@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { DatePicker } from 'primeng/datepicker';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
+import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-teacher-form',
@@ -27,6 +28,7 @@ export class TeacherForm implements OnInit {
   isEditing = false;
   http = inject(HttpClient);
   toastService = inject(ToastService);
+  config = inject(DynamicDialogConfig);
 
   teacherForm = new FormGroup({
     userId: new FormControl(),
@@ -68,7 +70,7 @@ export class TeacherForm implements OnInit {
       { name: 'other', value: 'Other' },
     ];
 
-    const teacherId = this.route.snapshot.paramMap.get('id');
+    const teacherId = this.config?.data;
     if (teacherId) {
       this.isEditing = true;
       this.getTeacherById(teacherId);

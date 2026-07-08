@@ -2,7 +2,7 @@
   <div class="teacher-header">
     <h1>Teachers</h1>
     <div>
-      <p-button [outlined]="true" label="Add Teacher" [routerLink]="['/teacher']" />
+      <p-button [outlined]="true" label="Add Teacher" (click)="addTeacher()" />
     </div>
   </div>
     <app-teacher-list></app-teacher-list>

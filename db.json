@@ -43,40 +43,6 @@
   ],
   "teachers": [
     {
-      "userId": 1,
-      "fullName": "Sujal Dahal",
-      "email": "sujal.dahal@gmail.com",
-      "phone": 9811111111,
-      "monthlySalary": 45000,
-      "address": "Kathmandu",
-      "status": "Active",
-      "nationalId": "12345678901",
-      "education": "M.Ed Mathematics",
-      "gender": "Male",
-      "religion": "Hindu",
-      "bloodGroup": "A+",
-      "experience": "5 Years",
-      "dob": "1994-05-15T00:00:00.000Z",
-      "id": "T001"
-    },
-    {
-      "userId": 2,
-      "fullName": "Anisha Sharma",
-      "email": "anisha.sharma@gmail.com",
-      "phone": 9811111112,
-      "monthlySalary": 52000,
-      "address": "Pokhara",
-      "status": "Active",
-      "nationalId": "12345678902",
-      "education": "M.Sc Physics",
-      "gender": "Female",
-      "religion": "Hindu",
-      "bloodGroup": "B+",
-      "experience": "6 Years",
-      "dob": "1992-09-10T00:00:00.000Z",
-      "id": "T002"
-    },
-    {
       "userId": 3,
       "fullName": "Ramesh Karki",
       "email": "ramesh.karki@gmail.com",
@@ -109,23 +75,6 @@
       "experience": "8 Years",
       "dob": "1990-11-25T00:00:00.000Z",
       "id": "T004"
-    },
-    {
-      "userId": 5,
-      "fullName": "Bikash Thapa",
-      "email": "bikash.thapa@gmail.com",
-      "phone": 9811111115,
-      "monthlySalary": 43000,
-      "address": "Chitwan",
-      "status": "Active",
-      "nationalId": "12345678905",
-      "education": "B.Sc Computer Science",
-      "gender": "Male",
-      "religion": "Hindu",
-      "bloodGroup": "A-",
-      "experience": "3 Years",
-      "dob": "1998-02-14T00:00:00.000Z",
-      "id": "T005"
     },
     {
       "userId": 7,
@@ -279,33 +228,51 @@
       "experience": "5 Years",
       "dob": "1995-11-09T00:00:00.000Z",
       "id": "T015"
+    },
+    {
+      "id": "SnlgoCy48a0",
+      "userId": 16,
+      "fullName": "Sujal Dahal",
+      "email": "shishirdevkota647@gmail.com",
+      "phone": 9821942597,
+      "address": "Sector 134",
+      "status": "Active",
+      "createdDate": "2026-07-08T06:50:32.897Z",
+      "monthlySalary": 12345678,
+      "nationalId": "23456y7ui",
+      "education": "ssdcdv ",
+      "religion": "Muslim",
+      "gender": "Female",
+      "bloodGroup": "O+",
+      "experience": "cd vsa",
+      "dob": "2026-07-21T18:15:00.000Z"
     }
   ],
   "students": [
     {
-      "id": "5",
       "userId": 1,
       "fullName": "Pratik Shrestha",
       "registrationNumber": 2025005,
-      "dateOfAdmission": "2025-04-18T10:00:00Z",
+      "dateOfAdmission": "2025-04-18T10:00:00.000Z",
       "email": "pratik.shrestha@gmail.com",
-      "dateOfBirth": "2009-04-09",
+      "dob": "2026-07-08T18:15:00.000Z",
       "gender": "Male",
       "phone": 9801234505,
       "address": "Bhaktapur",
       "bloodGroup": "A-",
       "orphanStudent": "No",
       "religion": "Muslim",
-      "createdAt": "2025-04-18T10:00:00Z",
       "updatedAt": "2025-04-18T10:00:00Z",
-      "guardianName": "Ganesh Shrestha",
       "guardian": "Father",
+      "guardianName": "Ganesh Shrestha",
       "guardianNationalId": 12345678905,
       "guardianPhone": 9811111105,
       "guardianEmail": "ganesh.shrestha@gmail.com",
       "guardianAddress": "sector 34",
       "guardianProfession": "Engineer",
-      "guardianIncome": 95000
+      "guardianIncome": 95000,
+      "id": "5",
+      "classId": 0
     },
     {
       "userId": 2,
@@ -316,11 +283,10 @@
       "dob": "2026-07-05T18:15:00.000Z",
       "gender": "Other",
       "phone": 9821942597,
-      "address": null,
+      "address": "Sector 134",
       "bloodGroup": "AB+",
       "orphanStudent": "No",
       "religion": "Cristian",
-      "createAt": null,
       "updatedAt": null,
       "guardian": "Mother",
       "guardianName": "r4tefdgb",
@@ -331,33 +297,33 @@
       "guardianProfession": "defegdhn",
       "guardianIncome": 23456,
       "id": "ncgPI4_8Otc"
-    },
-    {
-      "userId": 3,
-      "fullName": "apple",
-      "registrationNumber": 243567,
-      "dateOfAdmission": "2026-07-30T18:15:00.000Z",
-      "email": "dsfgb",
-      "dob": "2026-07-07T18:15:00.000Z",
-      "gender": "Female",
-      "phone": 45376890,
-      "address": "sda",
-      "bloodGroup": "A+",
-      "orphanStudent": "Yes",
-      "religion": "Cristian",
-      "updatedAt": "2026-07-06T08:39:55.259Z",
-      "guardian": "Grand Father",
-      "guardianName": "ertyuio",
-      "guardianNationalId": 23456789,
-      "guardianPhone": 54321,
-      "guardianEmail": "rfghjm,",
-      "guardianAddress": "fghjk.",
-      "guardianProfession": "hnmj,./",
-      "guardianIncome": 3456789,
-      "id": "WlbQXaCR7zA"
     }
   ],
-  "classes": [],
-  "attendance": [],
+  "classes": [
+    {
+      "id": "YK1zgn2A4yg",
+      "className": "Grade 11",
+      "section": "A",
+      "teacherId": 2,
+      "monthlyTuitionFees": 5000,
+      "createdAt": "2026-07-07T09:49:03.076Z"
+    }
+  ],
+  "attendance": [
+    {
+      "classId": null,
+      "studentId": "1",
+      "date": "2026-07-06T18:15:00.000Z",
+      "status": "Present",
+      "id": "4LVV_iJ5ulk"
+    },
+    {
+      "classId": null,
+      "studentId": "1",
+      "date": "2026-07-07T09:49:45.649Z",
+      "status": "Absent",
+      "id": "YYEwOIxay6s"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

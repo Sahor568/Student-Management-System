@@ -5,16 +5,15 @@
   acceptLabel="Delete"
   acceptSeverity="danger"
   (accept)="onDeleteAccept()"
-  (reject)="onDeleteReject()" )
 />
 
 <div class="teacher-list">
   <app-table
+    key="teacher"
     [data]="teachers()"
-    [columns]="columns"
-    emptyMessage="No teachers found."
-    (viewItem)="onView($event)"
-    (editItem)="onEdit($event)"
-    (deleteItem)="confirmDelete($event)"
+    [config]="tableConfig"
+    (onDelete)="confirmDelete($event)"
+    (onEdit)="onEdit($event)"
+    (onView)="onView($event)"
   />
 </div>

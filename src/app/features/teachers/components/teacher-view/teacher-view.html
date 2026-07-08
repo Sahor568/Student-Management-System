@@ -5,91 +5,91 @@
   acceptLabel="Delete"
   acceptSeverity="danger"
   (accept)="onDeleteAccept()"
-  (reject)="onDeleteReject()"
 />
 
 <div class="teacher-view-container">
-  <div class="form-header">
-    <h1>Teacher Detail</h1>
-    <p>Here you can see the teacher's details.</p>
-  </div>
+<!--  <div class="form-header">-->
+<!--    <h1>Teacher Detail</h1>-->
+<!--    <p>Here you can see the teacher's details.</p>-->
+<!--  </div>-->
 
   <div class="teacher-card">
     <div class="card-title">Teacher Information</div>
 
     <div class="field">
       <label>Teacher ID: </label>
-      <input [value]="teacher()!.userId" disabled />
+      <input [value]="teacher()?.userId" disabled />
     </div>
 
     <div class="field">
       <label>Full Name: </label>
-      <input [value]="teacher()!.fullName" disabled />
+      <input [value]="teacher()?.fullName" disabled />
     </div>
 
     <div class="field">
       <label>Email: </label>
-      <input [value]="teacher()!.email" disabled />
+      <input [value]="teacher()?.email" disabled />
     </div>
 
     <div class="field">
       <label>Phone Number: </label>
-      <input [value]="teacher()!.phone" disabled />
+      <input [value]="teacher()?.phone" disabled />
     </div>
 
     <div class="field">
       <label>Address: </label>
-      <input [value]="teacher()!.address" disabled />
+      <input [value]="teacher()?.address" disabled />
     </div>
 
     <div class="field">
       <label>Monthly Salary: </label>
-      <input [value]="teacher()!.monthlySalary" disabled />
+      <input [value]="teacher()?.monthlySalary" disabled />
     </div>
 
     <div class="field">
       <label>Status: </label>
-      <input [value]="teacher()!.status" disabled />
+      <input [value]="teacher()?.status" disabled />
     </div>
 
     <div class="field">
       <label>National ID: </label>
-      <input [value]="teacher()!.nationalId" disabled />
+      <input [value]="teacher()?.nationalId" disabled />
     </div>
 
     <div class="field">
       <label>Education: </label>
-      <input [value]="teacher()!.education" disabled />
+      <input [value]="teacher()?.education" disabled />
     </div>
 
     <div class="field">
       <label>Gender: </label>
-      <input [value]="teacher()!.gender" disabled />
+      <input [value]="teacher()?.gender" disabled />
     </div>
 
     <div class="field">
       <label>Religion: </label>
-      <input [value]="teacher()!.religion" disabled />
+      <input [value]="teacher()?.religion" disabled />
     </div>
 
     <div class="field">
       <label>Blood Group: </label>
-      <input [value]="teacher()!.bloodGroup" disabled />
+      <input [value]="teacher()?.bloodGroup" disabled />
     </div>
 
     <div class="field">
       <label>Experience: </label>
-      <input [value]="teacher()!.experience" disabled />
+      <input [value]="teacher()?.experience" disabled />
     </div>
 
     <div class="field">
       <label>Date Of Birth: </label>
-      <input [value]="teacher()!.dob" disabled />
+      <input [value]="teacher()?.dob?.substring(0, 10)" disabled />
+<!--      substring(0, 10)"  this extracts 10 digit from the date-->
     </div>
   </div>
 
   <div class="teacher-action">
-    <p-button [outlined]="true" label="Edit" [routerLink]="['/teacher', teacher()!.id]" />
+    <p-button [outlined]="true" label="Edit" [routerLink]="['/teacher', teacher()?.id]" />
     <p-button [outlined]="true" label="Delete" severity="danger" (click)="deleteTeacher(teacher()!)" />
   </div>
 </div>

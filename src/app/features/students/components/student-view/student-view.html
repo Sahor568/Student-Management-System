@@ -1,1 +1,125 @@
-<p>student-view works!</p>
+<app-confirm-dialog
+  #confirmDialog
+  message="Are you sure you want to delete this student?"
+  header="Delete Student"
+  acceptLabel="Delete"
+  acceptSeverity="danger"
+  (accept)="onDeleteAccept()"
+/>
+
+<div class="student-view-container">
+  <!--  <div class="form-header">-->
+  <!--    <h1>Student Detail</h1>-->
+  <!--    <p>Here you can see the student's details.</p>-->
+  <!--  </div>-->
+
+  <div class="student-card">
+    <div class="card-title">Student Information</div>
+
+    <div class="field">
+      <label>Student ID: </label>
+      <input [value]="student()?.userId" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Full Name: </label>
+      <input [value]="student()?.fullName" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Registration Number: </label>
+      <input [value]="student()?.registrationNumber" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Date Of Admission: </label>
+      <input [value]="student()?.dateOfAdmission?.substring(0,10)" disabled/>
+    </div>
+
+    <div class="field">
+      <label>Email: </label>
+      <input [value]="student()?.email" disabled/>
+    </div>
+
+
+    <div class="field">
+      <label>Date Of Birth: </label>
+      <input [value]="student()?.dob?.substring(0,10)" disabled/>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Gender: </label>
+    <input [value]="student()?.gender" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Phone Number: </label>
+    <input [value]="student()?.phone" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Address: </label>
+    <input [value]="student()?.address" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Blood Group: </label>
+    <input [value]="student()?.bloodGroup" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Orphan Student: </label>
+    <input [value]="student()?.orphanStudent" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Religion: </label>
+    <input [value]="student()?.religion" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian: </label>
+    <input [value]="student()?.guardian" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Name: </label>
+    <input [value]="student()?.guardianName" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian NationalId: </label>
+    <input [value]="student()?.guardianNationalId" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Phone Number: </label>
+    <input [value]="student()?.guardianPhone" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Email: </label>
+    <input [value]="student()?.guardianEmail" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Address: </label>
+    <input [value]="student()?.guardianAddress" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Profession: </label>
+    <input [value]="student()?.guardianProfession" disabled/>
+  </div>
+
+  <div class="field">
+    <label>Guardian Income: </label>
+    <input [value]="student()?.guardianIncome" disabled/>
+  </div>
+
+  <div class="student-action">
+    <p-button [outlined]="true" label="Edit" [routerLink]="['/student', student()?.id]"/>
+    <p-button [outlined]="true" label="Delete" severity="danger" (click)="deleteStudent(student()!)"/>
+  </div>
+</div>

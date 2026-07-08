@@ -1,35 +1,55 @@
 <div class="table-container">
-  @if (data.length > 0) {
-    <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" removableSort [paginator]="true" [rows]="10"
-             [rowsPerPageOptions]="[10, 25, 50]" class="table">
+  <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
+  <div class="table-container h-[780px]">
+    <p-table
+      [value]="localData()" [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true" [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [scrollable]="true" scrollHeight="flex"
+      class="table">
       <ng-template #header>
         <tr>
-          @for (col of columns; track col.field) {
-            <th [pSortableColumn]="col.field" >
+          @for (col of config().columns; track col.field) {
+            <th [pSortableColumn]="col.field">
               {{ col.header }}
               <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
           }
-          <th>Actions</th>
+          @if (config().actions?.length) {
+            <th>Actions</th>
+          }
         </tr>
       </ng-template>
 
       <ng-template #body let-item>
         <tr>
-          @for (col of columns; track col.field) {
+          @for (col of config().columns; track col.field) {
             <td>{{ item[col.field] }}</td>
           }
-          <td>
-            <p-button [outlined]="true" label="View" (click)="viewItem.emit(item)"/>
-            <p-button [outlined]="true" label="Edit" (click)="editItem.emit(item)"/>
-            <p-button [outlined]="true" label="Delete" severity="danger" (click)="deleteItem.emit(item.id)"/>
+          @if (config().actions?.length) {
+            <td>
+              @if (config().actions?.includes(ETableActions.view)) {
+                <p-button [outlined]="true" label="View" (click)="onView.emit(item)" />
+              }
+              @if (config().actions?.includes(ETableActions.edit)) {
+                <p-button [outlined]="true" label="Edit" (click)="onEdit.emit(item)" />
+              }
+              @if (config().actions?.includes(ETableActions.delete)) {
+                <p-button [outlined]="true" label="Delete" severity="danger" (click)="onDelete.emit(item.id)" />
+              }
+            </td>
+          }
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td [colSpan]="config().columns.length + (config().actions?.length ? 1 : 0)">
+            <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
+              No {{ key() }} found.
+            </div>
           </td>
         </tr>
       </ng-template>
     </p-table>
-  } @else {
-    <div class="empty-state">
-      <p>{{ emptyMessage }}</p>
-    </div>
-  }
+  </div>
 </div>
