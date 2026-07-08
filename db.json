@@ -52,7 +52,7 @@
   "teachers": [
     {
       "userId": 3,
-      "fullName": "Ramesh Karkidd",
+      "fullName": "Ramesh Karki",
       "email": "ramesh.karki@gmail.com",
       "phone": 9811111113,
       "monthlySalary": 48000,
@@ -137,7 +137,7 @@
     },
     {
       "userId": 10,
-      "fullName": "Kusum Bhandari",
+      "fullName": "",
       "email": "kusum.bhandari@gmail.com",
       "phone": 9811111120,
       "monthlySalary": 47000,
@@ -254,6 +254,24 @@
       "bloodGroup": "O+",
       "experience": "cd vsa",
       "dob": "2026-07-21T18:15:00.000Z"
+    },
+    {
+      "userId": 17,
+      "fullName": "asdsad",
+      "email": "asdsad",
+      "phone": 123123123,
+      "monthlySalary": 123123,
+      "address": null,
+      "status": "Active",
+      "nationalId": "12123",
+      "education": "1",
+      "gender": null,
+      "religion": null,
+      "bloodGroup": null,
+      "experience": null,
+      "dob": null,
+      "createdDate": "2026-07-08T11:34:20.797Z",
+      "id": "1XgCIGjFV2Y"
     }
   ],
   "students": [

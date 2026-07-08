@@ -1,7 +1,10 @@
 <div class="teacher-form-container">
   <div class="form-header">
-    <h1>{{ isEditing ? 'Edit' : 'Add' }} Teacher</h1>
-    <p>{{ isEditing ? 'Update Teacher Detail' : 'Add Teacher Detail' }}</p>
+    <div class="header-title">
+      <h1>{{ isEditing ? 'Edit' : 'Add' }} Teacher</h1>
+      <p>{{ isEditing ? 'Update Teacher Detail' : 'Add Teacher Detail' }}</p>
+    </div>
+    <span class="close-btn" (click)="dismiss()">X</span>
   </div>
 
   <div class="teacher-card">

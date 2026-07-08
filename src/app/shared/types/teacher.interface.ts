@@ -1,6 +1,6 @@
 export interface ITeacher {
   // Basic Information
-  id: number;
+  id?: number;
   userId: number;
   fullName: string;
   phone: string;

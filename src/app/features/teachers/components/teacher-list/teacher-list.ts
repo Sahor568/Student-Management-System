@@ -2,7 +2,10 @@ import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
-import { ETableActions, IDataTableConfig } from '../../../../shared/components/table/types/ColumnDef.interface';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/ColumnDef.interface';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -48,18 +51,22 @@ export class TeacherList implements OnInit {
       dismissableMask: true,
       closeOnEscape: true,
       // header: teacher.fullName,
-      header: "Teacher Details",
+      header: 'Teacher Details',
     });
   }
 
   onEdit(teacher: ITeacher) {
-    this.dialogService.open(TeacherForm , {
-      data: teacher.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      // header: 'Edit Teacher Details',
-    });
+    this.dialogService
+      .open(TeacherForm, {
+        data: teacher.id,
+        closable: true,
+        showHeader: false,
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchTeachers();
+        },
+      });
   }
 
   confirmDelete(id: string) {

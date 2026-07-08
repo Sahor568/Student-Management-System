@@ -48,6 +48,9 @@ export class Login {
           // Invalid email or password
           this.toastService.showToast('error', 'Login Status', 'Invalid email or password!');
         }
+      },
+      error: (err) => {
+        this.toastService.showToast('error', err.message, 'Something went wrong');
       }
     });
   }
