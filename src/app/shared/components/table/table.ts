@@ -5,10 +5,11 @@ import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Skeleton } from 'primeng/skeleton';
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, TableModule, Button, InputText, FormsModule],
+  imports: [CommonModule, TableModule, Button, InputText, FormsModule, Skeleton],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })
@@ -16,6 +17,7 @@ export class AppTable<K extends keyof EntityMap> {
   public key = input.required<K>();
   public data = input.required<EntityMap[K][]>();
   public config = input.required<IDataTableConfig>();
+  public loading = input<boolean>(false);
   public onView = output<EntityMap[K]>();
   public onEdit = output<EntityMap[K]>();
   public onDelete = output<string>();
@@ -32,8 +34,7 @@ export class AppTable<K extends keyof EntityMap> {
     }
 
     this.localData.set(
-      this.data().filter((item) =>
-        String(item.fullName).toLowerCase().includes(search)),
+      this.data().filter((item) => String(item.fullName).toLowerCase().includes(search)),
     );
   }
 }

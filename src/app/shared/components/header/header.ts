@@ -31,7 +31,7 @@ export class Header implements OnInit {
     const userId = JSON.parse(localStorage.getItem('currentUserId')!);
     const userRole = JSON.parse(localStorage.getItem('currentUserRole')!);
 
-    this.http.get<IUser>(`http://localhost:3000/users/${userId}`).subscribe({
+    this.http.get<IUser>(`/users/${userId}`).subscribe({
       next: (user) => {
         this.user = user;
         this.userName = user.fullName;

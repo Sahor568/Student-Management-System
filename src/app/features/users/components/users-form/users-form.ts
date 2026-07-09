@@ -55,7 +55,7 @@ export class UsersForm implements OnInit {
   }
 
   private getUserById(userId: string) {
-    this.http.get<IUser>('http://localhost:3000/users/' + userId).subscribe({
+    this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user = user;
         this.userForm.patchValue({
@@ -78,7 +78,7 @@ export class UsersForm implements OnInit {
   }
 
   private createTeacher() {
-    this.http.get<IUser[]>('http://localhost:3000/users').subscribe((users) => {
+    this.http.get<IUser[]>('/users').subscribe((users) => {
       const nextId = users.length > 0 ? Math.max(...users.map((t) => Number(t.userId))) + 1 : 1;
 
       const newUser: IUser = {
@@ -92,7 +92,7 @@ export class UsersForm implements OnInit {
 
       console.log(newUser.userId);
 
-      this.http.post<IUser>('http://localhost:3000/users', newUser).subscribe({
+      this.http.post<IUser>('/users', newUser).subscribe({
         next: () => {
           this.toastService.showToast('success', 'User Status', 'User Created successfully!');
           this.router.navigate(['/users']);
@@ -104,7 +104,7 @@ export class UsersForm implements OnInit {
   private editTeacher() {
     const userId = this.config?.data;
     this.http
-      .put<ITeacher>(`http://localhost:3000/users/${userId}`, this.userForm.value)
+      .put<ITeacher>(`/users/${userId}`, this.userForm.value)
       .subscribe({
         next: (updated) => {
           this.toastService.showToast('success', 'Status', 'User Updated successfully!');

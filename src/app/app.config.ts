@@ -5,13 +5,21 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import Aura from '@primeuix/themes/aura';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import {
+  DelayInterceptor,
+  RequestHeaderInterceptor,
+  ResponseErrorInterceptor,
+} from './core/interceptor/http.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([RequestHeaderInterceptor, ResponseErrorInterceptor, DelayInterceptor]),
+    ),
     providePrimeNG({
       theme: {
         preset: Aura,

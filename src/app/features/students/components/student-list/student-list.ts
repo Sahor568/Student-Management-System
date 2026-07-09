@@ -44,7 +44,7 @@ export class StudentList implements OnInit {
   }
 
   fetchStudents() {
-    this.http.get<IStudent[]>('http://localhost:3000/students').subscribe({
+    this.http.get<IStudent[]>('/students').subscribe({
       next: (data) =>
         this.students.set(
           data.map((teacher) => ({
@@ -81,7 +81,7 @@ export class StudentList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedStudentId !== null) {
-      this.http.delete(`http://localhost:3000/students/${this.selectedStudentId}`).subscribe({
+      this.http.delete(`/students/${this.selectedStudentId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Student deleted successfully');
         },

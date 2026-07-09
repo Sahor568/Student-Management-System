@@ -31,7 +31,7 @@ export class TeacherView implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
-    this.http.get<ITeacher>('http://localhost:3000/teachers/' + teacherId).subscribe({
+    this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher.set(teacher);
       },
@@ -48,7 +48,7 @@ export class TeacherView implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedTeacherId !== null) {
-      this.http.delete(`http://localhost:3000/teachers/${this.selectedTeacherId}`).subscribe({
+      this.http.delete(`/teachers/${this.selectedTeacherId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
           this.router.navigate(['/teachers']);

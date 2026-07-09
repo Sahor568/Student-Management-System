@@ -96,7 +96,7 @@ export class StudentForm implements OnInit {
   }
 
   getStudentById(studentId: string): void {
-    this.http.get<IStudent>('http://localhost:3000/students/' + studentId).subscribe({
+    this.http.get<IStudent>('/students/' + studentId).subscribe({
       next: (student) => {
         this.student = student;
         this.studentForm.patchValue({
@@ -138,7 +138,7 @@ export class StudentForm implements OnInit {
   }
 
   createStudent(): void {
-    this.http.get<IStudent[]>('http://localhost:3000/students').subscribe((students) => {
+    this.http.get<IStudent[]>('/students').subscribe((students) => {
       const nextId =
         students.length > 0 ? Math.max(...students.map((s) => Number(s.userId))) + 1 : 1;
 
@@ -170,7 +170,7 @@ export class StudentForm implements OnInit {
         guardianIncome: this.studentForm.value.guardianIncome!,
       };
 
-      this.http.post<IStudent>('http://localhost:3000/students', newStudent).subscribe({
+      this.http.post<IStudent>('/students', newStudent).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Student Status', 'Student Created successfully!');
           this.router.navigate(['/students']);
@@ -182,7 +182,7 @@ export class StudentForm implements OnInit {
   editStudent(): void {
     const studentId = this.route.snapshot.paramMap.get('id');
     this.http
-      .put<IStudent>(`http://localhost:3000/students/${studentId}`, this.studentForm.value)
+      .put<IStudent>(`/students/${studentId}`, this.studentForm.value)
       .subscribe({
         next: (updated) => {
           this.toastService.showToast('success', 'Status', 'Student Updated successfully!');

@@ -12,6 +12,7 @@
     key="teacher"
     [data]="teachers()"
     [config]="tableConfig"
+    [loading]="loading()"
     (onDelete)="confirmDelete($event)"
     (onEdit)="onEdit($event)"
     (onView)="onView($event)"

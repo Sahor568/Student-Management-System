@@ -80,7 +80,7 @@ export class TeacherForm implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
-    this.http.get<ITeacher>('http://localhost:3000/teachers/' + teacherId).subscribe({
+    this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher = teacher;
         this.teacherForm.patchValue(teacher);
@@ -103,20 +103,20 @@ export class TeacherForm implements OnInit {
 
     const getNextId = async () => {
       const teachers = await firstValueFrom(
-        this.http.get<ITeacher[]>('http://localhost:3000/teachers'),
+        this.http.get<ITeacher[]>('/teachers'),
       );
       return teachers.length > 0 ? Math.max(...teachers.map((t) => Number(t.userId))) + 1 : 1;
     };
 
     if (this.isEditing) {
-      api = this.http.put<ITeacher>(`http://localhost:3000/teachers/${this.teacherId}`, payload);
+      api = this.http.put<ITeacher>(`/teachers/${this.teacherId}`, payload);
     } else {
       payload = {
         ...payload,
         userId: await getNextId(),
         createdDate: new Date().toISOString(),
       };
-      api = this.http.post<ITeacher>('http://localhost:3000/teachers', payload);
+      api = this.http.post<ITeacher>('/teachers', payload);
     }
 
     api.subscribe({

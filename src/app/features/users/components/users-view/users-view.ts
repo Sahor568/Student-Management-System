@@ -30,7 +30,7 @@ export class UsersView implements OnInit {
     }
   }
   private getUserById(userId: string) {
-    this.http.get<IUser>('http://localhost:3000/users/' + userId).subscribe({
+    this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user.set(user);
       },
@@ -47,7 +47,7 @@ export class UsersView implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedUserId !== null) {
-      this.http.delete(`http://localhost:3000/users/${this.selectedUserId}`).subscribe({
+      this.http.delete(`/users/${this.selectedUserId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
           this.router.navigate(['/teachers']);

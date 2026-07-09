@@ -12,6 +12,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { TeacherView } from '../teacher-view/teacher-view';
 import { AppTable } from '../../../../shared/components/table/table';
 import { TeacherForm } from '../teacher-form/teacher-form';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-teacher-list',
@@ -34,6 +35,7 @@ export class TeacherList implements OnInit {
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
   };
   protected teachers = signal<ITeacher[]>([]);
+  protected loading = signal<boolean>(false);
   private http = inject(HttpClient);
   private router = inject(Router);
   private toastService = inject(ToastService);
@@ -76,7 +78,7 @@ export class TeacherList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedTeacherId !== null) {
-      this.http.delete(`http://localhost:3000/teachers/${this.selectedTeacherId}`).subscribe({
+      this.http.delete(`${ApiConstants.TEACHER}/${this.selectedTeacherId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
         },
@@ -91,13 +93,19 @@ export class TeacherList implements OnInit {
   }
 
   private fetchTeachers() {
-    this.http.get<ITeacher[]>('http://localhost:3000/teachers').subscribe({
-      next: (data) =>
+    this.loading.set(true);
+    this.http.get<ITeacher[]>(ApiConstants.TEACHER).subscribe({
+      next: (data) => {
         this.teachers.set(
           data.map((teacher) => ({
             ...teacher,
           })),
-        ),
+        );
+      },
+      complete: () => {
+        console.log('ping');
+        this.loading.set(false);
+      },
     });
   }
 }
