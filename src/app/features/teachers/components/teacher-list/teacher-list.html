@@ -1,3 +1,4 @@
+<!--TODO: Make this component reusable-->
 <app-confirm-dialog
   #confirmDialog
   message="Are you sure you want to delete this teacher?"
@@ -16,5 +17,6 @@
     (onDelete)="confirmDelete($event)"
     (onEdit)="onEdit($event)"
     (onView)="onView($event)"
+    (onAdd)="onAdd()"
   />
 </div>

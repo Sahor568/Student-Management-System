@@ -5,14 +5,15 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { IUser } from '../../../../shared/types/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
-import {
-  ETableActions,
-  IDataTableConfig,
-} from '../../../../shared/components/table/types/ColumnDef.interface';
+
 import { DialogService } from 'primeng/dynamicdialog';
 import { UsersView } from '../users-view/users-view';
 import { UsersForm } from '../users-form/users-form';
 import { UserService } from '../../../../shared/services/user';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-users-list',
@@ -27,7 +28,7 @@ export class UsersList implements OnInit {
   toastService = inject(ToastService);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedUserId!: string;
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<IUser> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },

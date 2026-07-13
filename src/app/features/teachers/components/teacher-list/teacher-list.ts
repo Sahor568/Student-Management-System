@@ -1,11 +1,6 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
-import {
-  ETableActions,
-  IDataTableConfig,
-} from '../../../../shared/components/table/types/ColumnDef.interface';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -13,6 +8,10 @@ import { TeacherView } from '../teacher-view/teacher-view';
 import { AppTable } from '../../../../shared/components/table/table';
 import { TeacherForm } from '../teacher-form/teacher-form';
 import { ApiConstants } from '../../../../shared/constants/api.constants';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-teacher-list',
@@ -23,7 +22,7 @@ import { ApiConstants } from '../../../../shared/constants/api.constants';
 })
 export class TeacherList implements OnInit {
   protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<ITeacher> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
@@ -33,11 +32,11 @@ export class TeacherList implements OnInit {
       { field: 'status', header: 'Status' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['monthlySalary', 'nationalId'],
   };
   protected teachers = signal<ITeacher[]>([]);
   protected loading = signal<boolean>(false);
   private http = inject(HttpClient);
-  private router = inject(Router);
   private toastService = inject(ToastService);
   private dialogService = inject(DialogService);
   private selectedTeacherId?: string;
@@ -55,20 +54,6 @@ export class TeacherList implements OnInit {
       // header: teacher.fullName,
       header: 'Teacher Details',
     });
-  }
-
-  onEdit(teacher: ITeacher) {
-    this.dialogService
-      .open(TeacherForm, {
-        data: teacher.id,
-        closable: true,
-        showHeader: false,
-      })
-      ?.onClose?.subscribe({
-        next: () => {
-          this.fetchTeachers();
-        },
-      });
   }
 
   confirmDelete(id: string) {
@@ -92,6 +77,31 @@ export class TeacherList implements OnInit {
     }
   }
 
+  // TODO: Use same function for add and edit
+  protected onEdit(teacher: ITeacher) {
+    this.dialogService
+      .open(TeacherForm, {
+        data: teacher.id,
+        closable: true,
+        showHeader: false,
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchTeachers();
+        },
+      });
+  }
+
+  // TODO: Use same function for add and edit
+  protected onAdd() {
+    this.dialogService.open(TeacherForm, {
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      draggable: false,
+    });
+  }
+
   private fetchTeachers() {
     this.loading.set(true);
     this.http.get<ITeacher[]>(ApiConstants.TEACHER).subscribe({
@@ -103,7 +113,6 @@ export class TeacherList implements OnInit {
         );
       },
       complete: () => {
-        console.log('ping');
         this.loading.set(false);
       },
     });

@@ -1,24 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { TeacherList } from './components/teacher-list/teacher-list';
-import { Button } from 'primeng/button';
-import { TeacherForm } from './components/teacher-form/teacher-form';
-import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-teachers',
-  imports: [TeacherList, Button],
+  imports: [TeacherList],
   templateUrl: './teachers.html',
   styleUrl: './teachers.scss',
 })
-export class Teachers {
-  private dialogService = inject(DialogService);
-
-  protected addTeacher() {
-    this.dialogService.open(TeacherForm, {
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      draggable: false
-    });
-  }
-}
+export class Teachers {}

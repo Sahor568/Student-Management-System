@@ -1,19 +1,16 @@
 import { IStudent } from '../../../types/student.interface';
 import { ITeacher } from '../../../types/teacher.interface';
 import { IUser } from '../../../types/user.interface';
-import { IClass } from '../../../types/class.interface';
-import { IAttendance } from '../../../types/attendance.interface';
 
-
-
-interface ITableColumns {
-  field: string;
+interface ITableColumns<T> {
+  field: keyof T;
   header: string;
 }
 
-export interface IDataTableConfig {
-  columns: ITableColumns[];
+export interface IDataTableConfig<T> {
+  columns: ITableColumns<T>[];
   actions?: ETableActions[];
+  searchFields?: (keyof T)[];
 }
 
 export enum ETableActions {

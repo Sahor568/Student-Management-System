@@ -7,18 +7,16 @@ import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
-import {
-  DelayInterceptor,
-  RequestHeaderInterceptor,
-  ResponseErrorInterceptor,
-} from './core/interceptor/http.interceptor';
+import { delayInterceptor } from './core/interceptor/delay.interceptor';
+import { errorInterceptor } from './core/interceptor/error.interceptor';
+import { requestInterceptor } from './core/interceptor/request.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([RequestHeaderInterceptor, ResponseErrorInterceptor, DelayInterceptor]),
+      withInterceptors([requestInterceptor, errorInterceptor, delayInterceptor]),
     ),
     providePrimeNG({
       theme: {
@@ -32,6 +30,5 @@ export const appConfig: ApplicationConfig = {
     DialogService,
     DynamicDialogConfig,
     ConfirmationService,
-    provideHttpClient(), //recent method to http client in angular more than 17+ angular
   ],
 };

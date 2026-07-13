@@ -3,15 +3,15 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { ToastService } from '../../../../shared/services/toast.service';
 import { IStudent } from '../../../../shared/types/student.interface';
 import { HttpClient } from '@angular/common/http';
-import {
-  ETableActions,
-  IDataTableConfig,
-} from '../../../../shared/components/table/types/ColumnDef.interface';
 import { AppTable } from '../../../../shared/components/table/table';
 import { Router } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { StudentView } from '../student-view/student-view';
 import { StudentForm } from '../student-form/student-form';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-student-list',
@@ -24,11 +24,9 @@ export class StudentList implements OnInit {
   http = inject(HttpClient);
   router = inject(Router);
   toastService = inject(ToastService);
-  private dialogService = inject(DialogService);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedStudentId?: string;
-
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<IStudent> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
@@ -38,6 +36,7 @@ export class StudentList implements OnInit {
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
   };
+  private dialogService = inject(DialogService);
 
   ngOnInit(): void {
     this.fetchStudents();
@@ -60,7 +59,7 @@ export class StudentList implements OnInit {
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
-      header: "Student Details",
+      header: 'Student Details',
     });
   }
 

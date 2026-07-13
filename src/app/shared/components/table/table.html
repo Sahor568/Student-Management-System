@@ -1,6 +1,13 @@
-<div class="table-container">
-  <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
-  <div class="table-container h-[780px]">
+<!--TODO: Table columns should have fixed width-->
+<div>
+  <div class="flex mb-5 justify-between items-center">
+    <h1>{{ key() + 's' | titlecase }}</h1>
+    <div class="flex gap-5">
+      <p-button [outlined]="true" [label]="`Add ${key()}` | titlecase" (click)="onAdd.emit()" />
+      <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
+    </div>
+  </div>
+  <div class="table-container h-[770px]">
     <p-table
       [value]="localData()" [tableStyle]="{ 'min-width': '50rem' }"
       [paginator]="true" [rows]="10"
@@ -10,9 +17,9 @@
       <ng-template #header>
         <tr>
           @for (col of config().columns; track col.field) {
-            <th [pSortableColumn]="col.field">
+            <th [pSortableColumn]="col.field.toString()">
               {{ col.header }}
-              <p-sortIcon [field]="col.field"></p-sortIcon>
+              <p-sortIcon [field]="col.field.toString()"></p-sortIcon>
             </th>
           }
           @if (config().actions?.length) {
@@ -27,7 +34,7 @@
             <td>{{ item[col.field] }}</td>
           }
           @if (config().actions?.length) {
-            <td>
+            <td class="flex gap-2">
               @if (config().actions?.includes(ETableActions.view)) {
                 <p-button [outlined]="true" label="View" (click)="onView.emit(item)" />
               }
