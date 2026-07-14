@@ -1,83 +1,91 @@
-<div class="teacher-form-container">
-  <div class="form-header">
-    <div class="header-title">
-      <h1>{{ isEditing ? 'Edit' : 'Add' }} Teacher</h1>
-      <p>{{ isEditing ? 'Update Teacher Detail' : 'Add Teacher Detail' }}</p>
-    </div>
-    <span class="close-btn" (click)="dismiss()">X</span>
-  </div>
+<div class=" p-2.5 w-[1100px] max-w-full">
+  <form [formGroup]="teacherForm">
 
-  <div class="teacher-card">
-    <div class="card-title">Teacher Information</div>
-    <form [formGroup]="teacherForm">
-      <div class="basic-information">
-        <div>Basic Information</div>
-        <div class="">
-          <label for="fullName">Full Name:</label>
-          <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
+    <!-- Section 1: Basic Information -->
+    <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+      <div class="section-title flex">
+        <span class="section-badge">1</span>
+        <h2 class="m-0">Basic Information</h2>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input id="fullName" formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
         </div>
-        <div class="">
-          <label for="email">Email:</label>
-          <input formControlName="email" pInputText placeholder="Enter email" type="text"/>
+        <div class="field">
+          <label for="email">Email <span class="required">*</span></label>
+          <input id="email" formControlName="email" pInputText placeholder="Enter email" type="text"/>
         </div>
-        <div class="">
-          <label for="phone">Phone Number:</label>
-          <input formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
+        <div class="field">
+          <label for="phone">Phone Number <span class="required">*</span></label>
+          <input id="phone" formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
         </div>
-        <div class="">
-          <label for="status">Status:</label>
-          <p-select class="w-full md:w-56" [options]="status"
+
+        <div class="field">
+          <label for="status">Status</label>
+          <p-select id="status" class="w-full" [options]="status"
                     optionLabel="name" optionValue="value" placeholder="Select Status" formControlName="status"/>
         </div>
-        <div class="">
-          <label for="salary">Monthly Salary:</label>
-          <input formControlName="monthlySalary" pInputText placeholder="Monthly Salary of Teacher" type="number"/>
+        <div class="field">
+          <label for="salary">Monthly Salary</label>
+          <input id="salary" formControlName="monthlySalary" pInputText placeholder="Monthly Salary of Teacher" type="number"/>
         </div>
       </div>
+    </div>
 
-      <div class="other-information">
-        <div>Other Information</div>
-        <div class="">
-          <label for="nationalId">National ID:</label>
-          <input formControlName="nationalId" pInputText placeholder="Enter National ID" type="text"/>
+    <!-- Section 2: Other Information -->
+    <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+      <div class="section-title flex">
+        <span class="section-badge">2</span>
+        <h2>Other Information</h2>
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="nationalId">National ID</label>
+          <input id="nationalId" formControlName="nationalId" pInputText placeholder="Enter National ID" type="text"/>
         </div>
-        <div class="">
+        <div class="field">
           <label for="education">Education</label>
-          <input formControlName="education" pInputText placeholder="Enter Education level" type="text"/>
+          <input id="education" formControlName="education" pInputText placeholder="Enter Education level" type="text"/>
         </div>
-        <div class="">
-          <label for="experience">Experience</label>
-          <input formControlName="experience" pInputText placeholder="Enter Experience" type="text"/>
-        </div>
-        <div class="">
-          <label for="address">Address</label>
-          <input formControlName="address" pInputText placeholder="Enter address" type="text"/>
-        </div>
-        <div class="">
+        <div class="field">
           <label for="gender">Gender</label>
-          <p-select class="w-full md:w-56" [options]="gender"
+          <p-select id="gender" class="w-full" [options]="gender"
                     optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="gender"/>
         </div>
-        <div class="">
+
+        <div class="field">
+          <label for="experience">Experience</label>
+          <input id="experience" formControlName="experience" pInputText placeholder="Enter Experience" type="text"/>
+        </div>
+        <div class="field">
           <label for="religion">Religion</label>
-          <p-select class="w-full md:w-56" [options]="religion"
+          <p-select id="religion" class="w-full" [options]="religion"
                     optionLabel="name" optionValue="value" placeholder="Select Religion" formControlName="religion"/>
         </div>
-        <div class="">
+        <div class="field">
           <label for="bloodGroup">Blood Group</label>
-          <p-select class="w-full md:w-56" [options]="bloodGroup"
-                    optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="bloodGroup"/>
-        </div>
-        <div class="">
-          <label for="dob">Date of Birth<span class="required">*</span>:</label>
-          <p-datePicker formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
+          <p-select id="bloodGroup" class="w-full" [options]="bloodGroup"
+                    optionLabel="name" optionValue="value" placeholder="Select Blood Group" formControlName="bloodGroup"/>
         </div>
 
+        <div class="field">
+          <label for="address">Address</label>
+          <input id="address" formControlName="address" pInputText placeholder="Enter address" type="text"/>
+        </div>
+        <div class="field">
+          <label for="dob">Date of Birth <span class="required">*</span></label>
+          <p-datePicker id="dob" formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
+        </div>
       </div>
-      <div class="submit-container">
-        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
-                  styleClass="w-full mx-auto" [disabled]="teacherForm.invalid"/>
-      </div>
-    </form>
-  </div>
+    </div>
+
+    <div class="submit-container">
+      <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+                styleClass="w-full mx-auto" [disabled]="teacherForm.invalid"/>
+    </div>
+
+  </form>
 </div>

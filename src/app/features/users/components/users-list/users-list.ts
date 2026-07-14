@@ -1,16 +1,19 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import {Button} from "primeng/button";
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AppTable } from '../../../../shared/components/table/table';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { IUser } from '../../../../shared/types/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { ETableActions, IDataTableConfig } from '../../../../shared/components/table/types/ColumnDef.interface';
+
 import { DialogService } from 'primeng/dynamicdialog';
 import { UsersView } from '../users-view/users-view';
-import { TeacherForm } from '../../../teachers/components/teacher-form/teacher-form';
 import { UsersForm } from '../users-form/users-form';
+import { UserService } from '../../../../shared/services/user.service';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-users-list',
@@ -23,11 +26,9 @@ export class UsersList implements OnInit {
   http = inject(HttpClient);
   router = inject(Router);
   toastService = inject(ToastService);
-  private dialogService = inject(DialogService);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedUserId!: string;
-
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<IUser> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
@@ -36,21 +37,22 @@ export class UsersList implements OnInit {
       { field: 'role', header: 'Role' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['fullName', 'email'],
   };
+  private dialogService = inject(DialogService);
+  private userService = inject(UserService);
+  protected loading = signal<boolean>(false);
 
   ngOnInit() {
     this.fetchUsers();
   }
 
-  fetchUsers() {
-    this.http.get<IUser[]>('http://localhost:3000/users').subscribe({
-      next: (data) =>
-        this.users.set(
-          data.map((user) => ({
-            ...user,
-          })),
-        ),
-    });
+  async fetchUsers() {
+    this.loading.set(true);
+
+    this.users.set(await this.userService.fetchAllUsers());
+
+    this.loading.set(false);
   }
 
   onView(user: IUser) {
@@ -77,7 +79,7 @@ export class UsersList implements OnInit {
   }
   onDeleteAccept() {
     if (this.selectedUserId !== null) {
-      this.http.delete(`http://localhost:3000/users/${this.selectedUserId}`).subscribe({
+      this.http.delete(`/users/${this.selectedUserId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'User deleted successfully');
         },

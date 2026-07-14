@@ -1,6 +1,13 @@
-<div class="table-container">
-  <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
-  <div class="table-container h-[780px]">
+<!--TODO: Table columns should have fixed width-->
+<div>
+  <div class="flex mb-5 justify-between items-center">
+    <h1>{{ key() + 's' | titlecase }}</h1>
+    <div class="flex gap-5">
+      <p-button class="addBtn" [outlined]="true" [label]="`Add ${key()}` | titlecase" (click)="onAdd.emit()" />
+      <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
+    </div>
+  </div>
+  <div class="table-container h-[770px] overflow-hidden rounded-lg">
     <p-table
       [value]="localData()" [tableStyle]="{ 'min-width': '50rem' }"
       [paginator]="true" [rows]="10"
@@ -8,11 +15,10 @@
       [scrollable]="true" scrollHeight="flex"
       class="table">
       <ng-template #header>
-        <tr>
+        <tr class="tHead">
           @for (col of config().columns; track col.field) {
-            <th [pSortableColumn]="col.field">
+            <th>
               {{ col.header }}
-              <p-sortIcon [field]="col.field"></p-sortIcon>
             </th>
           }
           @if (config().actions?.length) {
@@ -27,7 +33,7 @@
             <td>{{ item[col.field] }}</td>
           }
           @if (config().actions?.length) {
-            <td>
+            <td class="flex gap-2">
               @if (config().actions?.includes(ETableActions.view)) {
                 <p-button [outlined]="true" label="View" (click)="onView.emit(item)" />
               }
@@ -43,13 +49,29 @@
       </ng-template>
       <ng-template #emptymessage>
         <tr>
-          <td [colSpan]="config().columns.length + (config().actions?.length ? 1 : 0)">
-            <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
-              No {{ key() }} found.
-            </div>
-          </td>
+          @if (loading()) {
+            @for (col of config().columns; track col.field) {
+              <td>
+                <p-skeleton width="5rem" height="1rem" borderRadius="16px" />
+              </td>
+            }
+            @if (config().actions?.length) {
+              <td class="flex gap-2">
+                @for (button of config().actions; track $index) {
+                  <p-skeleton width="2.5rem" height="2rem" borderRadius="16px" />
+                }
+              </td>
+            }
+          } @else {
+            <td [colSpan]="config().columns.length + (config().actions?.length ? 1 : 0)">
+              <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
+                No {{ key() }} found.
+              </div>
+            </td>
+          }
         </tr>
       </ng-template>
+
     </p-table>
   </div>
 </div>

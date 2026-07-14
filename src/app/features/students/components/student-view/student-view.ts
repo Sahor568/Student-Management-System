@@ -31,7 +31,7 @@ export class StudentView implements OnInit {
   }
 
   protected getStudentById(studentId: string) {
-    this.http.get<IStudent>('http://localhost:3000/students/' + studentId).subscribe({
+    this.http.get<IStudent>('/students/' + studentId).subscribe({
       next: (student) => {
         this.student.set(student);
       },
@@ -48,7 +48,7 @@ export class StudentView implements OnInit {
 
   protected onDeleteAccept() {
     if (this.selectedStudentId !== null) {
-      this.http.delete(`http://localhost:3000/students/${this.selectedStudentId}`).subscribe({
+      this.http.delete(`/students/${this.selectedStudentId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
           this.router.navigate(['/students']);

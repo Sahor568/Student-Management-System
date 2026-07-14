@@ -3,15 +3,15 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { ToastService } from '../../../../shared/services/toast.service';
 import { IStudent } from '../../../../shared/types/student.interface';
 import { HttpClient } from '@angular/common/http';
-import {
-  ETableActions,
-  IDataTableConfig,
-} from '../../../../shared/components/table/types/ColumnDef.interface';
 import { AppTable } from '../../../../shared/components/table/table';
 import { Router } from '@angular/router';
 import { DialogService } from 'primeng/dynamicdialog';
 import { StudentView } from '../student-view/student-view';
 import { StudentForm } from '../student-form/student-form';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-student-list',
@@ -24,19 +24,21 @@ export class StudentList implements OnInit {
   http = inject(HttpClient);
   router = inject(Router);
   toastService = inject(ToastService);
-  private dialogService = inject(DialogService);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedStudentId?: string;
+  private dialogService = inject(DialogService);
+  protected loading = signal<boolean>(false);
 
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<IStudent> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
       { field: 'registrationNumber', header: 'Registration Number' },
       { field: 'gender', header: 'Gender' },
-      { field: 'email', header: 'email' },
+      { field: 'email', header: 'Email' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['fullName', 'email', 'registrationNumber'],
   };
 
   ngOnInit(): void {
@@ -44,13 +46,18 @@ export class StudentList implements OnInit {
   }
 
   fetchStudents() {
-    this.http.get<IStudent[]>('http://localhost:3000/students').subscribe({
+    this.loading.set(true);
+    this.http.get<IStudent[]>('/students').subscribe({
       next: (data) =>
         this.students.set(
           data.map((teacher) => ({
             ...teacher,
           })),
         ),
+      complete: () => {
+        this.loading.set(false);
+
+      }
     });
   }
 
@@ -60,18 +67,23 @@ export class StudentList implements OnInit {
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
-      header: "Student Details",
+      header: 'Student Details',
     });
   }
 
-  onEdit(student: IStudent) {
+  onClick(student?: IStudent) {
     this.dialogService.open(StudentForm, {
-      data: student.id,
+      data: student?.id,
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
-      // header: 'Edit Teacher Details',
-    });
+      header: student? 'Edit Student Details' : 'Add Student Details',
+    })
+      ?.onClose?.subscribe({
+      next: () => {
+        this.fetchStudents();
+      }
+    })
   }
 
   confirmDelete(id: string) {
@@ -81,7 +93,7 @@ export class StudentList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedStudentId !== null) {
-      this.http.delete(`http://localhost:3000/students/${this.selectedStudentId}`).subscribe({
+      this.http.delete(`/students/${this.selectedStudentId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Student deleted successfully');
         },

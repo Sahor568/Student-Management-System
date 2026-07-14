@@ -1,17 +1,17 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
-import {
-  ETableActions,
-  IDataTableConfig,
-} from '../../../../shared/components/table/types/ColumnDef.interface';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { TeacherView } from '../teacher-view/teacher-view';
 import { AppTable } from '../../../../shared/components/table/table';
 import { TeacherForm } from '../teacher-form/teacher-form';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
+import {
+  ETableActions,
+  IDataTableConfig,
+} from '../../../../shared/components/table/types/table.interface';
 
 @Component({
   selector: 'app-teacher-list',
@@ -22,7 +22,7 @@ import { TeacherForm } from '../teacher-form/teacher-form';
 })
 export class TeacherList implements OnInit {
   protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
-  protected tableConfig: IDataTableConfig = {
+  protected tableConfig: IDataTableConfig<ITeacher> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
@@ -32,16 +32,33 @@ export class TeacherList implements OnInit {
       { field: 'status', header: 'Status' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['fullName', 'email', 'address'],
   };
   protected teachers = signal<ITeacher[]>([]);
+  protected loading = signal<boolean>(false);
   private http = inject(HttpClient);
-  private router = inject(Router);
   private toastService = inject(ToastService);
   private dialogService = inject(DialogService);
   private selectedTeacherId?: string;
 
   ngOnInit() {
     this.fetchTeachers();
+  }
+
+  private fetchTeachers() {
+    this.loading.set(true);
+    this.http.get<ITeacher[]>(ApiConstants.TEACHER).subscribe({
+      next: (data) => {
+        this.teachers.set(
+          data.map((teacher) => ({
+            ...teacher,
+          })),
+        );
+      },
+      complete: () => {
+        this.loading.set(false);
+      },
+    });
   }
 
   onView(teacher: ITeacher) {
@@ -55,20 +72,6 @@ export class TeacherList implements OnInit {
     });
   }
 
-  onEdit(teacher: ITeacher) {
-    this.dialogService
-      .open(TeacherForm, {
-        data: teacher.id,
-        closable: true,
-        showHeader: false,
-      })
-      ?.onClose?.subscribe({
-        next: () => {
-          this.fetchTeachers();
-        },
-      });
-  }
-
   confirmDelete(id: string) {
     this.selectedTeacherId = id;
     this.confirmDialog()?.confirm();
@@ -76,7 +79,7 @@ export class TeacherList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedTeacherId !== null) {
-      this.http.delete(`http://localhost:3000/teachers/${this.selectedTeacherId}`).subscribe({
+      this.http.delete(`${ApiConstants.TEACHER}/${this.selectedTeacherId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
         },
@@ -90,14 +93,37 @@ export class TeacherList implements OnInit {
     }
   }
 
-  private fetchTeachers() {
-    this.http.get<ITeacher[]>('http://localhost:3000/teachers').subscribe({
-      next: (data) =>
-        this.teachers.set(
-          data.map((teacher) => ({
-            ...teacher,
-          })),
-        ),
-    });
+  // TODO: ✅ done ✅ Use same function for add and edit
+  protected onClick(teacher?: ITeacher) {
+    this.dialogService
+      .open(TeacherForm, {
+        data: teacher?.id,
+        closable: true,
+        dismissableMask: true,
+        closeOnEscape: true,
+        header: teacher ? 'Edit Teacher Details' : 'Add Teacher Details',
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchTeachers();
+        },
+      });
   }
+
+  // TODO: ✅ done ✅ Use same function for add and edit
+  // protected onAdd() {
+  //   this.dialogService
+  //     .open(TeacherForm, {
+  //       closable: true,
+  //       dismissableMask: true,
+  //       closeOnEscape: true,
+  //       draggable: false,
+  //       header: 'Add Teacher Details',
+  //     })
+  //     ?.onClose?.subscribe({
+  //       next: () => {
+  //         this.fetchTeachers();
+  //       },
+  //     });
+  // }
 }

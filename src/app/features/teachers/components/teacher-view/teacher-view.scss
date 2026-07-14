@@ -1,3 +1,105 @@
 .teacher-view-container {
-  padding: 10px;
+  max-width: 100%;
+}
+
+
+.form-card {
+  border: 1px solid #eef0f4;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  padding: 1.5rem 1.75rem;
+}
+
+.section-title {
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid #eef0f4;
+
+  .section-badge {
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}
+
+.field-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem 1.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+
+  input {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid #eef0f4;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: #f8f9fb;
+    box-sizing: border-box;
+    cursor: default;
+
+    &:disabled {
+      color: #1e293b;
+      opacity: 1;
+      -webkit-text-fill-color: #1e293b;
+    }
+  }
+}
+
+.teacher-action {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  ::ng-deep .p-button {
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  ::ng-deep .p-button-outlined {
+    border-color: #6d4fe0;
+    color: #6d4fe0;
+
+    &:hover {
+      background: rgba(109, 79, 224, 0.06);
+    }
+  }
+
+  ::ng-deep .p-button-danger.p-button-outlined {
+    border-color: #ef4444;
+    color: #ef4444;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.06);
+    }
+  }
 }

@@ -1,12 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import {Button} from "primeng/button";
 import { StudentList } from './components/student-list/student-list';
 import { DialogService } from 'primeng/dynamicdialog';
 import { StudentForm } from './components/student-form/student-form';
 
 @Component({
   selector: 'app-students',
-  imports: [Button, StudentList],
+  imports: [StudentList],
   templateUrl: './students.html',
   styleUrl: './students.scss',
 })

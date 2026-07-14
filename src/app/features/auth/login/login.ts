@@ -6,6 +6,7 @@ import { InputText } from 'primeng/inputtext';
 import { ToastService } from '../../../shared/services/toast.service';
 import { Button } from 'primeng/button';
 import { HttpClient } from '@angular/common/http';
+import { ApiConstants } from '../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ export class Login {
 
   // Method to handle form submission
   protected onSubmit() {
-    this.http.get<any>('http://localhost:3000/users').subscribe({
+    this.http.get<any>(ApiConstants.USER).subscribe({
       next: (res) => {
         const user = res.find((a: any) => {
           // Correctly check both email AND password
@@ -49,9 +50,6 @@ export class Login {
           this.toastService.showToast('error', 'Login Status', 'Invalid email or password!');
         }
       },
-      error: (err) => {
-        this.toastService.showToast('error', err.message, 'Something went wrong');
-      }
     });
   }
 

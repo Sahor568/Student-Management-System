@@ -1,16 +1,8 @@
 .sidebar-container {
-  display: flex;
   flex-direction: column;
   width: 256px;
-  height: 100vh;
+  height: 100%;
   border-right: 1px solid #e5e5e5;
-  padding: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: var(--primary-bg-color);
-
-
 }
 
 .title {
@@ -18,7 +10,6 @@
   font-weight: 700;
   padding: 16px 16px;
   border-bottom: 1px solid #ddd;
-  //letter-spacing: 0.01em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +75,6 @@
 }
 
 .image-container {
-  display: flex;
   justify-content: center;
   align-items: center;
   height: auto;

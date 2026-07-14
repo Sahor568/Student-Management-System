@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { TeacherForm } from '../teacher-form/teacher-form';
 
 @Component({
   selector: 'app-teacher-view',
-  imports: [Button, RouterLink, ConfirmDialog],
+  imports: [Button, ConfirmDialog],
   templateUrl: './teacher-view.html',
   styleUrl: './teacher-view.scss',
 })
@@ -21,6 +22,8 @@ export class TeacherView implements OnInit {
   config = inject(DynamicDialogConfig);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedTeacherId?: number;
+  private dialogService = inject(DialogService);
+  private dialogRef = inject(DynamicDialogRef);
 
   ngOnInit(): void {
     const teacherId = this.config?.data;
@@ -31,7 +34,7 @@ export class TeacherView implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
-    this.http.get<ITeacher>('http://localhost:3000/teachers/' + teacherId).subscribe({
+    this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher.set(teacher);
       },
@@ -48,12 +51,24 @@ export class TeacherView implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedTeacherId !== null) {
-      this.http.delete(`http://localhost:3000/teachers/${this.selectedTeacherId}`).subscribe({
+      this.http.delete(`/teachers/${this.selectedTeacherId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
-          this.router.navigate(['/teachers']);
+          this.dialogRef.close();
         },
       });
     }
+  }
+
+  onEdit(teacher: ITeacher) {
+    this.dialogRef.close();
+
+    this.dialogService.open(TeacherForm, {
+      data: teacher.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      header: 'Edit Teacher Details',
+    });
   }
 }

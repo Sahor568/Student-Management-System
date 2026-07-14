@@ -18,7 +18,7 @@ export class ClassList {
   private selectedClassId?: string;
 
   fetchClasses() {
-    this.http.get<IClass[]>('http://localhost:3000/classes').subscribe({
+    this.http.get<IClass[]>('/classes').subscribe({
       next: (data) => {
         this.classes.set(data);
       },
@@ -30,7 +30,7 @@ export class ClassList {
 
   onDeleteAccept() {
     if (this.selectedClassId !== null) {
-      this.http.delete(`http://localhost:3000/classes/${this.selectedClassId}`).subscribe({
+      this.http.delete(`/classes/${this.selectedClassId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Classes deleted successfully');
         },
