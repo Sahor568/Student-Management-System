@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, inject, input, OnInit, signal, viewChild } from '@angular/core';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -24,6 +24,7 @@ export class TeacherView implements OnInit {
   selectedTeacherId?: number;
   private dialogService = inject(DialogService);
   private dialogRef = inject(DynamicDialogRef);
+  protected loading = signal<boolean>(false);
 
   ngOnInit(): void {
     const teacherId = this.config?.data;
@@ -34,12 +35,16 @@ export class TeacherView implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
+    this.loading.set(true);
     this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher.set(teacher);
       },
       error: (err) => {
         console.error('Failed to load teacher', err);
+      },
+      complete: () => {
+        this.loading.set(false);
       },
     });
   }

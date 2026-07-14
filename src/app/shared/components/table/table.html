@@ -1,13 +1,19 @@
 <!--TODO: Table columns should have fixed width-->
 <div>
   <div class="flex mb-5 justify-between items-center">
-    <h1>{{ key() + 's' | titlecase }}</h1>
-    <div class="flex gap-5">
-      <p-button class="addBtn" [outlined]="true" [label]="`Add ${key()}` | titlecase" (click)="onAdd.emit()" />
-      <input pInputText placeholder="Search Name" type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm">
+    <h1 class="text-2xl font-bold text-gray-800">{{ key() + 's' | titlecase }}</h1>
+    <div class="flex gap-4">
+      <button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition-colors"
+              (click)="onAdd.emit()">
+        <i class="pi pi-plus text-xs"></i>
+        {{ 'Add ' + key() | titlecase }}
+      </button>
+      <input pInputText placeholder="Search..." type="text" (keyup)="eSearch()" [(ngModel)]="searchTerm"
+             class="!rounded-lg !border-gray-300 !py-2 !px-4 !text-sm focus:!ring-2 focus:!ring-indigo-500 focus:!border-indigo-500" />
     </div>
   </div>
-  <div class="table-container h-[770px] overflow-hidden rounded-lg">
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden rounded-lg h-[calc(79.2vh)]">
     <p-table
       [value]="localData()" [tableStyle]="{ 'min-width': '50rem' }"
       [paginator]="true" [rows]="10"
@@ -17,55 +23,64 @@
       <ng-template #header>
         <tr class="tHead">
           @for (col of config().columns; track col.field) {
-            <th>
+            <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
               {{ col.header }}
             </th>
           }
           @if (config().actions?.length) {
-            <th>Actions</th>
+            <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
           }
         </tr>
       </ng-template>
 
       <ng-template #body let-item>
-        <tr>
+        <tr class="border-t border-gray-100 hover:bg-gray-50 transition-colors">
           @for (col of config().columns; track col.field) {
-            <td>{{ item[col.field] }}</td>
+            <td class="!py-3 !px-4 text-sm text-gray-700">{{ item[col.field] }}</td>
           }
           @if (config().actions?.length) {
-            <td class="flex gap-2">
-              @if (config().actions?.includes(ETableActions.view)) {
-                <p-button [outlined]="true" label="View" (click)="onView.emit(item)" />
-              }
-              @if (config().actions?.includes(ETableActions.edit)) {
-                <p-button [outlined]="true" label="Edit" (click)="onEdit.emit(item)" />
-              }
-              @if (config().actions?.includes(ETableActions.delete)) {
-                <p-button [outlined]="true" label="Delete" severity="danger" (click)="onDelete.emit(item.id)" />
-              }
+            <td class="!py-3 !px-4">
+              <div class="flex gap-2">
+                @if (config().actions?.includes(ETableActions.view)) {
+                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                          (click)="onView.emit(item)">View</button>
+                }
+                @if (config().actions?.includes(ETableActions.edit)) {
+                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-300 text-indigo-600 hover:bg-indigo-50 transition-colors"
+                          (click)="onEdit.emit(item)">Edit</button>
+                }
+                @if (config().actions?.includes(ETableActions.delete)) {
+                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
+                          (click)="onDelete.emit(item.id)">Delete</button>
+                }
+              </div>
             </td>
           }
         </tr>
       </ng-template>
+
       <ng-template #emptymessage>
         <tr>
           @if (loading()) {
             @for (col of config().columns; track col.field) {
-              <td>
-                <p-skeleton width="5rem" height="1rem" borderRadius="16px" />
+              <td class="!py-3 !px-4">
+                <p-skeleton width="5rem" height="1rem" borderRadius="8px" />
               </td>
             }
             @if (config().actions?.length) {
-              <td class="flex gap-2">
-                @for (button of config().actions; track $index) {
-                  <p-skeleton width="2.5rem" height="2rem" borderRadius="16px" />
-                }
+              <td class="!py-3 !px-4">
+                <div class="flex gap-2">
+                  @for (button of config().actions; track $index) {
+                    <p-skeleton width="2.5rem" height="2rem" borderRadius="8px" />
+                  }
+                </div>
               </td>
             }
           } @else {
             <td [colSpan]="config().columns.length + (config().actions?.length ? 1 : 0)">
-              <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
-                No {{ key() }} found.
+              <div class="flex flex-col items-center justify-center gap-3 py-12 text-center text-gray-400">
+                <i class="pi pi-inbox text-4xl"></i>
+                <span class="text-sm">No {{ key() }} found.</span>
               </div>
             </td>
           }

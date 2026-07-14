@@ -1,6 +1,6 @@
 <p-toast position="top-right" />
 
-<div class="flex overflow-hidden bg-gradient-to-br from-[#667eea] to-[#764ba2]">
+<div class="flex overflow-hidden bg-gray-50">
   @if (isLoggedIn()) {
     <app-sidebar />
   }
@@ -8,7 +8,7 @@
     @if (isLoggedIn()) {
       <app-header />
     }
-    <div class="overflow-auto " [class.m-5]="isLoggedIn()">
+    <div class="overflow-auto" [class.m-5]="isLoggedIn()">
       <router-outlet></router-outlet>
     </div>
   </div>
