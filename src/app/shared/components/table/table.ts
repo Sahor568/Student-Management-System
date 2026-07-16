@@ -10,7 +10,7 @@ import { EntityMap, ETableActions, IDataTableConfig } from './types/table.interf
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, TableModule, Button, InputText, FormsModule, Skeleton],
+  imports: [CommonModule, TableModule, InputText, FormsModule, Skeleton],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })

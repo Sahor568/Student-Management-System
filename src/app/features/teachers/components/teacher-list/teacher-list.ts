@@ -12,6 +12,7 @@ import {
   ETableActions,
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
+import { TeacherService } from '../../../../shared/services/teacher.service';
 
 @Component({
   selector: 'app-teacher-list',
@@ -40,36 +41,31 @@ export class TeacherList implements OnInit {
   private toastService = inject(ToastService);
   private dialogService = inject(DialogService);
   private selectedTeacherId?: string;
+  private teacherService = inject(TeacherService);
 
   ngOnInit() {
     this.fetchTeachers();
   }
 
-  private fetchTeachers() {
+  private async fetchTeachers() {
     this.loading.set(true);
-    this.http.get<ITeacher[]>(ApiConstants.TEACHER).subscribe({
-      next: (data) => {
-        this.teachers.set(
-          data.map((teacher) => ({
-            ...teacher,
-          })),
-        );
-      },
-      complete: () => {
-        this.loading.set(false);
-      },
-    });
+    this.teachers.set(await this.teacherService.fetchAllTeachers());
+    this.loading.set(false);
   }
 
   onView(teacher: ITeacher) {
-    this.dialogService.open(TeacherView, {
-      data: teacher.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      // header: teacher.fullName,
-      header: 'Teacher Details',
-    });
+    this.dialogService
+      .open(TeacherView, {
+        data: teacher.id,
+        closable: true,
+        header: 'Teacher Details',
+        draggable: false,
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchTeachers();
+        },
+      });
   }
 
   confirmDelete(id: string) {
@@ -93,14 +89,12 @@ export class TeacherList implements OnInit {
     }
   }
 
-  // TODO: ✅ done ✅ Use same function for add and edit
   protected onClick(teacher?: ITeacher) {
     this.dialogService
       .open(TeacherForm, {
         data: teacher?.id,
         closable: true,
-        dismissableMask: true,
-        closeOnEscape: true,
+        draggable: false,
         header: teacher ? 'Edit Teacher Details' : 'Add Teacher Details',
       })
       ?.onClose?.subscribe({
@@ -109,21 +103,4 @@ export class TeacherList implements OnInit {
         },
       });
   }
-
-  // TODO: ✅ done ✅ Use same function for add and edit
-  // protected onAdd() {
-  //   this.dialogService
-  //     .open(TeacherForm, {
-  //       closable: true,
-  //       dismissableMask: true,
-  //       closeOnEscape: true,
-  //       draggable: false,
-  //       header: 'Add Teacher Details',
-  //     })
-  //     ?.onClose?.subscribe({
-  //       next: () => {
-  //         this.fetchTeachers();
-  //       },
-  //     });
-  // }
 }

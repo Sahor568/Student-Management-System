@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
@@ -30,6 +30,7 @@ export class TeacherForm implements OnInit {
   toastService = inject(ToastService);
   config = inject(DynamicDialogConfig);
   private dialogRef = inject(DynamicDialogRef);
+  protected loading = signal<boolean>(false);
 
   teacherForm = new FormGroup({
     userId: new FormControl(),
@@ -51,7 +52,7 @@ export class TeacherForm implements OnInit {
   ngOnInit(): void {
     this.status = [
       { name: 'Active', value: 'Active' },
-      { name: 'UnActive', value: 'UnActive' },
+      { name: 'InActive', value: 'InActive' },
     ];
     this.gender = [
       { name: 'Male', value: 'Male' },
@@ -65,9 +66,14 @@ export class TeacherForm implements OnInit {
       { name: 'other', value: 'Other' },
     ];
     this.bloodGroup = [
-      { name: 'O+', value: 'O+' },
       { name: 'A+', value: 'A+' },
+      { name: 'A-', value: 'A-' },
+      { name: 'B+', value: 'B+' },
+      { name: 'B-', value: 'B-' },
       { name: 'AB+', value: 'AB+' },
+      { name: 'AB-', value: 'AB-' },
+      { name: 'O+', value: 'O+' },
+      { name: 'O-', value: 'O-' },
       { name: 'other', value: 'Other' },
     ];
 
@@ -79,6 +85,7 @@ export class TeacherForm implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
+    this.loading.set(true);
     this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher = teacher;
@@ -99,7 +106,11 @@ export class TeacherForm implements OnInit {
           dob: teacher.dob ? new Date(teacher.dob) : null,
         });
       },
+      complete: () => {
+        this.loading.set(false);
+      }
     });
+
   }
 
   onSubmit() {
@@ -152,5 +163,4 @@ export class TeacherForm implements OnInit {
       },
     });
   }
-
 }

@@ -1,123 +1,134 @@
 <div class="student-form-container">
-  <form [formGroup]="studentForm">
-    <div class="form-card">
+  @if (loading()) {
+    <div class="flex items-center justify-center w-full h-full">
+      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
 
-      <div class="section-title">
-        <span class="section-badge">1</span>
-        <h2>Basic Information</h2>
-      </div>
+  } @else {
+    <form [formGroup]="studentForm">
+      <div class="form-card">
 
-      <div class="field-grid">
-        <div class="field">
-          <label for="fullName">Full Name:</label>
-          <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
+        <div class="section-title">
+          <span class="section-badge">1</span>
+          <h2>Basic Information</h2>
         </div>
 
-        <div class="field">
-          <label for="registrationNumber">Registration Number:</label>
-          <input formControlName="registrationNumber" pInputText placeholder="Enter Registration Number" type="number"/>
+        <div class="field-grid">
+          <div class="field">
+            <label for="fullName">Full Name:</label>
+            <input formControlName="fullName" pInputText placeholder="Enter Full Name" type="text"/>
+          </div>
+
+          <div class="field">
+            <label for="registrationNumber">Registration Number:</label>
+            <input formControlName="registrationNumber" pInputText placeholder="Enter Registration Number"
+                   type="number"/>
+          </div>
+          <div class="field">
+            <label for="dateOfAdmission">Date of Admission<span class="required">*</span>:</label>
+            <p-datePicker formControlName="dateOfAdmission" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
+                          class="datePicker"/>
+          </div>
         </div>
-        <div class="field">
-          <label for="dateOfAdmission">Date of Admission<span class="required">*</span>:</label>
-          <p-datePicker formControlName="dateOfAdmission" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
-                        class="datePicker"/>
+      </div>
+
+      <div class="form-card">
+        <div class="section-title">
+          <span class="section-badge">2</span>
+          <h2>Other Information</h2>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="email">Email:</label>
+            <input formControlName="email" pInputText placeholder="Enter email" type="text"/>
+          </div>
+          <div class="field">
+            <label for="dob">Date of Birth<span class="required">*</span>:</label>
+            <p-datePicker formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
+          </div>
+          <div class="field">
+            <label for="gender">Gender</label>
+            <p-select class="w-full md:w-56" [options]="gender"
+                      optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="gender"/>
+          </div>
+          <div class="field">
+            <label for="address">Address:</label>
+            <input formControlName="address" pInputText placeholder="Enter address" type="text"/>
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number:</label>
+            <input formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
+          </div>
+          <div class="field">
+            <label for="bloodGroup">Blood Group</label>
+            <p-select class="w-full md:w-56" [options]="bloodGroup"
+                      optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="bloodGroup"/>
+          </div>
+          <div class="field">
+            <label for="orphanStudent">Orphan Student</label>
+            <p-select class="w-full md:w-56" [options]="orphanStudent"
+                      optionLabel="name" optionValue="value" placeholder="Select Orphan Student or Not"
+                      formControlName="orphanStudent"/>
+          </div>
+          <div class="field">
+            <label for="religion">Religion</label>
+            <p-select class="w-full md:w-56" [options]="religion"
+                      optionLabel="name" optionValue="value" placeholder="Select Religion" formControlName="religion"/>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-card">
-      <div class="section-title">
-        <span class="section-badge">2</span>
-        <h2>Other Information</h2>
+      <div class="form-card">
+        <div class="section-title">
+          <span class="section-badge">3</span>
+          <h2>Guardian Information</h2>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="guardian">Guardian</label>
+            <p-select class="w-full md:w-56" [options]="guardian"
+                      optionLabel="name" optionValue="value" placeholder="Select Guardian" formControlName="guardian"/>
+          </div>
+          <div class="field">
+            <label for="guardianName">Guardian Name:</label>
+            <input formControlName="guardianName" pInputText placeholder="Enter GuardianName" type="text"/>
+          </div>
+          <div class="field">
+            <label for="guardianNationalId">Guardian National Id:</label>
+            <input formControlName="guardianNationalId" pInputText placeholder="Enter Guardian National Id"
+                   type="number"/>
+          </div>
+          <div class="field">
+            <label for="guardianPhone">Guardian Phone Number:</label>
+            <input formControlName="guardianPhone" pInputText placeholder="Enter Guardian contact Number"
+                   type="number"/>
+          </div>
+          <div class="field">
+            <label for="guardianEmail">Guardian Email:</label>
+            <input formControlName="guardianEmail" pInputText placeholder="Enter Guardian Email" type="text"/>
+          </div>
+          <div class="field">
+            <label for="guardianAddress">Guardian Address:</label>
+            <input formControlName="guardianAddress" pInputText placeholder="Enter Guardian Address" type="text"/>
+          </div>
+          <div class="field">
+            <label for="guardianProfession">Guardian Profession:</label>
+            <input formControlName="guardianProfession" pInputText placeholder="Enter Guardian Profession" type="text"/>
+          </div>
+          <div class="field">
+            <label for="guardianIncome">Guardian Income:</label>
+            <input formControlName="guardianIncome" pInputText placeholder="Enter Guardian Income" type="number"/>
+          </div>
+        </div>
       </div>
-      <div class="field-grid">
-      <div class="field">
-        <label for="email">Email:</label>
-        <input formControlName="email" pInputText placeholder="Enter email" type="text"/>
-      </div>
-      <div class="field">
-        <label for="dob">Date of Birth<span class="required">*</span>:</label>
-        <p-datePicker formControlName="dob" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
-      </div>
-      <div class="field">
-        <label for="gender">Gender</label>
-        <p-select class="w-full md:w-56" [options]="gender"
-                  optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="gender"/>
-      </div>
-      <div class="field">
-        <label for="address">Address:</label>
-        <input formControlName="address" pInputText placeholder="Enter address" type="text"/>
-      </div>
-      <div class="field">
-        <label for="phone">Phone Number:</label>
-        <input formControlName="phone" pInputText placeholder="Enter contact number" type="number"/>
-      </div>
-      <div class="field">
-        <label for="bloodGroup">Blood Group</label>
-        <p-select class="w-full md:w-56" [options]="bloodGroup"
-                  optionLabel="name" optionValue="value" placeholder="Select Gender" formControlName="bloodGroup"/>
-      </div>
-      <div class="field">
-        <label for="orphanStudent">Orphan Student</label>
-        <p-select class="w-full md:w-56" [options]="orphanStudent"
-                  optionLabel="name" optionValue="value" placeholder="Select Orphan Student or Not"
-                  formControlName="orphanStudent"/>
-      </div>
-      <div class="field">
-        <label for="religion">Religion</label>
-        <p-select class="w-full md:w-56" [options]="religion"
-                  optionLabel="name" optionValue="value" placeholder="Select Religion" formControlName="religion"/>
-      </div>
-    </div>
-    </div>
 
-    <div class="form-card">
-      <div class="section-title">
-        <span class="section-badge">3</span>
-        <h2>Guardian Information</h2>
+      <div class="submit-container">
+        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+                  styleClass="w-full mx-auto" [disabled]="studentForm.invalid"/>
       </div>
-      <div class="field-grid">
-      <div class="field">
-        <label for="guardian">Guardian</label>
-        <p-select class="w-full md:w-56" [options]="guardian"
-                  optionLabel="name" optionValue="value" placeholder="Select Guardian" formControlName="guardian"/>
-      </div>
-      <div class="field">
-        <label for="guardianName">Guardian Name:</label>
-        <input formControlName="guardianName" pInputText placeholder="Enter GuardianName" type="text"/>
-      </div>
-      <div class="field">
-        <label for="guardianNationalId">Guardian National Id:</label>
-        <input formControlName="guardianNationalId" pInputText placeholder="Enter Guardian National Id"
-               type="number"/>
-      </div>
-      <div class="field">
-        <label for="guardianPhone">Guardian Phone Number:</label>
-        <input formControlName="guardianPhone" pInputText placeholder="Enter Guardian contact Number" type="number"/>
-      </div>
-      <div class="field">
-        <label for="guardianEmail">Guardian Email:</label>
-        <input formControlName="guardianEmail" pInputText placeholder="Enter Guardian Email" type="text"/>
-      </div>
-      <div class="field">
-        <label for="guardianAddress">Guardian Address:</label>
-        <input formControlName="guardianAddress" pInputText placeholder="Enter Guardian Address" type="text"/>
-      </div>
-      <div class="field">
-        <label for="guardianProfession">Guardian Profession:</label>
-        <input formControlName="guardianProfession" pInputText placeholder="Enter Guardian Profession" type="text"/>
-      </div>
-      <div class="field">
-        <label for="guardianIncome">Guardian Income:</label>
-        <input formControlName="guardianIncome" pInputText placeholder="Enter Guardian Income" type="number"/>
-      </div>
-    </div>
-    </div>
 
-    <div class="submit-container">
-      <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
-                styleClass="w-full mx-auto" [disabled]="studentForm.invalid"/>
-    </div>
-
-  </form>
+    </form>
+  }
 </div>

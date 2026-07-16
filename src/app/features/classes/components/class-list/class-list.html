@@ -7,13 +7,15 @@
   (accept)="onDeleteAccept()"
 />
 
-<div class="teacher-list">
-<!--  <app-table-->
-<!--    key="teacher"-->
-<!--    [data]="classes()"-->
-<!--    [config]="tableConfig"-->
-<!--    (onDelete)="confirmDelete($event)"-->
-<!--    (onEdit)="onEdit($event)"-->
-<!--    (onView)="onView($event)"-->
-<!--  />-->
+<div class="class-list">
+  <app-table
+    key="class"
+    [data]="classes()"
+    [config]="tableConfig"
+    [loading]="loading()"
+    (onAdd)="onClick()"
+    (onView)="onView($event)"
+    (onEdit)="onClick($event)"
+    (onDelete)="confirmDelete($event)"
+  />
 </div>

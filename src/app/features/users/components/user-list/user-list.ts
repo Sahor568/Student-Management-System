@@ -7,21 +7,22 @@ import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
 
 import { DialogService } from 'primeng/dynamicdialog';
-import { UsersView } from '../users-view/users-view';
-import { UsersForm } from '../users-form/users-form';
+import { UserView } from '../user-view/user-view';
+import { UserForm } from '../user-form/user-form';
 import { UserService } from '../../../../shared/services/user.service';
 import {
   ETableActions,
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
-  selector: 'app-users-list',
+  selector: 'app-user-list',
   imports: [AppTable, ConfirmDialog],
-  templateUrl: './users-list.html',
-  styleUrl: './users-list.scss',
+  templateUrl: './user-list.html',
+  styleUrl: './user-list.scss',
 })
-export class UsersList implements OnInit {
+export class UserList implements OnInit {
   users = signal<IUser[]>([]);
   http = inject(HttpClient);
   router = inject(Router);
@@ -47,39 +48,49 @@ export class UsersList implements OnInit {
     this.fetchUsers();
   }
 
-  async fetchUsers() {
+  private async fetchUsers() {
     this.loading.set(true);
-
     this.users.set(await this.userService.fetchAllUsers());
-
     this.loading.set(false);
   }
 
   onView(user: IUser) {
-    this.dialogService.open(UsersView, {
-      data: user.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-    });
+    this.dialogService
+      .open(UserView, {
+        data: user.id,
+        closable: true,
+        header: 'User Details',
+        draggable: false,
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchUsers();
+        },
+      });
   }
 
-  onEdit(user: IUser) {
-    this.dialogService.open(UsersForm, {
-      data: user.id,
+  onClick(user?: IUser) {
+    this.dialogService.open(UserForm, {
+      data: user?.id,
       closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-    });
+      draggable: false,
+      header: user ? 'Edit User Details' : 'Add User Details',
+    })
+    ?.onClose?.subscribe({
+      next: () => {
+        this.fetchUsers();
+      }
+    })
   }
 
   confirmDelete(id: string) {
     this.selectedUserId = id;
     this.confirmDialog()?.confirm();
   }
+
   onDeleteAccept() {
     if (this.selectedUserId !== null) {
-      this.http.delete(`/users/${this.selectedUserId}`).subscribe({
+      this.http.delete(`${ApiConstants.USER}/${this.selectedUserId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'User deleted successfully');
         },

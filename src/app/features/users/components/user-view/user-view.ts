@@ -3,23 +3,27 @@ import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/conf
 import { Button } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
 import { IUser } from '../../../../shared/types/user.interface';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
+import { UserForm } from '../user-form/user-form';
 
 @Component({
-  selector: 'app-users-view',
-  imports: [ConfirmDialog, Button, RouterLink],
-  templateUrl: './users-view.html',
-  styleUrl: './users-view.scss',
+  selector: 'app-user-view',
+  imports: [ConfirmDialog, Button],
+  templateUrl: './user-view.html',
+  styleUrl: './user-view.scss',
 })
-export class UsersView implements OnInit {
+export class UserView implements OnInit {
   user = signal<IUser | null>(null);
+  protected loading = signal<boolean>(false);
   selectedUserId?: number;
   config = inject(DynamicDialogConfig);
   http = inject(HttpClient);
   toastService = inject(ToastService);
   router = inject(Router);
+  private dialogService = inject(DialogService);
+  private dialogRef = inject(DynamicDialogRef);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
 
   ngOnInit(): void {
@@ -30,6 +34,8 @@ export class UsersView implements OnInit {
     }
   }
   private getUserById(userId: string) {
+    this.loading.set(true);
+
     this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user.set(user);
@@ -37,6 +43,9 @@ export class UsersView implements OnInit {
       error: (err) => {
         console.error('Failed to load user', err);
       },
+      complete: () => {
+        this.loading.set(false);
+      }
     });
   }
 
@@ -54,5 +63,18 @@ export class UsersView implements OnInit {
         },
       });
     }
+  }
+
+  protected onEdit(user: IUser) {
+    this.dialogRef.close();
+
+    this.dialogService.open(UserForm, {
+      data: user.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      draggable: false,
+      header: 'Edit User Details',
+    });
   }
 }

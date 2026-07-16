@@ -12,6 +12,7 @@ import {
   ETableActions,
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-student-list',
@@ -47,7 +48,7 @@ export class StudentList implements OnInit {
 
   fetchStudents() {
     this.loading.set(true);
-    this.http.get<IStudent[]>('/students').subscribe({
+    this.http.get<IStudent[]>(`${ApiConstants.STUDENT}`).subscribe({
       next: (data) =>
         this.students.set(
           data.map((teacher) => ({
@@ -56,19 +57,24 @@ export class StudentList implements OnInit {
         ),
       complete: () => {
         this.loading.set(false);
-
-      }
+      },
     });
   }
 
   onView(student: IStudent) {
-    this.dialogService.open(StudentView, {
-      data: student.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      header: 'Student Details',
-    });
+    this.dialogService
+      .open(StudentView, {
+        data: student.id,
+        closable: true,
+        dismissableMask: true,
+        closeOnEscape: true,
+        header: 'Student Details',
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchStudents();
+        },
+      });
   }
 
   onClick(student?: IStudent) {
@@ -93,7 +99,7 @@ export class StudentList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedStudentId !== null) {
-      this.http.delete(`/students/${this.selectedStudentId}`).subscribe({
+      this.http.delete(`${ApiConstants.STUDENT}/${this.selectedStudentId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Student deleted successfully');
         },

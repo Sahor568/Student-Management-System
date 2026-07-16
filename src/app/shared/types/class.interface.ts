@@ -3,7 +3,7 @@ export interface IClass{
   classId: number;
   className: string;
   section: string;
-  teacherId: number;
+  teacherId: string;
   monthlyTuitionFees: number;
-  createdAt: string;
+  createdAt?: string;
 }

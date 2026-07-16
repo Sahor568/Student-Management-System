@@ -7,6 +7,7 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TeacherForm } from '../teacher-form/teacher-form';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-teacher-view',
@@ -40,29 +41,10 @@ export class TeacherView implements OnInit {
       next: (teacher) => {
         this.teacher.set(teacher);
       },
-      error: (err) => {
-        console.error('Failed to load teacher', err);
-      },
       complete: () => {
         this.loading.set(false);
       },
     });
-  }
-
-  deleteTeacher(teacher: ITeacher): void {
-    this.selectedTeacherId = teacher.id;
-    this.confirmDialog()?.confirm();
-  }
-
-  onDeleteAccept() {
-    if (this.selectedTeacherId !== null) {
-      this.http.delete(`/teachers/${this.selectedTeacherId}`).subscribe({
-        next: () => {
-          this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
-          this.dialogRef.close();
-        },
-      });
-    }
   }
 
   onEdit(teacher: ITeacher) {
@@ -73,7 +55,26 @@ export class TeacherView implements OnInit {
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
+      draggable: false,
       header: 'Edit Teacher Details',
     });
+  }
+
+  deleteTeacher(teacher: ITeacher): void {
+    this.selectedTeacherId = teacher.id;
+    this.confirmDialog()?.confirm();
+  }
+
+  onDeleteAccept() {
+    if (this.selectedTeacherId !== null) {
+      this.http.delete(`${ApiConstants.TEACHER}/${this.selectedTeacherId}`).subscribe({
+        next: () => {
+          this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
+        },
+        complete: () => {
+          this.dialogRef.close();
+        }
+      });
+    }
   }
 }
