@@ -35,7 +35,6 @@ export class UserList implements OnInit {
       { field: 'fullName', header: 'Full Name' },
       { field: 'email', header: 'Email' },
       { field: 'password', header: 'Password' },
-      { field: 'role', header: 'Role' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
     searchFields: ['fullName', 'email'],

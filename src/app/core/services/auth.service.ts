@@ -15,4 +15,12 @@ export class AuthService {
   getCurrentUserRole() {
     return JSON.parse(localStorage.getItem('currentUserRole')!);
   }
+
+  isAdmin(): boolean {
+    return this.getCurrentUserRole() === 'admin';
+  }
+
+  isTeacher(): boolean {
+    return this.getCurrentUserRole() === 'Teacher';
+  }
 }

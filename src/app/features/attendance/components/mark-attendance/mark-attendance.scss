@@ -1,8 +1,181 @@
-.mark-attendance-container {
+.section-title {
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid #eef0f4;
+
+  .section-badge {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1e1b4b;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4f2fc9;
+  }
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem 1.75rem;
+}
+
+.field {
   display: flex;
   flex-direction: column;
-  padding-left: 256px;
-  padding-top: 58px;
-  max-width: 900px;
-  margin: 2rem auto;
+  gap: 0.4rem;
+
+  label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #64748b;
+
+    .required {
+      color: #ef4444;
+    }
+  }
+}
+
+.mark-attendance-card,
+.form-card {
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid #dfe3ea;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #a5abbd;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: #ef4444;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+      }
+    }
+  }
+
+  :host ::ng-deep .p-select,
+  :host ::ng-deep .p-datepicker-input,
+  ::ng-deep .p-select {
+    width: 100% !important;
+
+    .p-select-label {
+      padding: 0.6rem 0.85rem;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+  }
+}
+
+.mark-attendance-action {
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  ::ng-deep .p-button {
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  ::ng-deep .p-button-outlined {
+    border-color: #6d4fe0;
+    color: #6d4fe0;
+
+    &:hover {
+      background: rgba(109, 79, 224, 0.06);
+    }
+  }
+
+  ::ng-deep .p-button-danger.p-button-outlined {
+    border-color: #ef4444;
+    color: #ef4444;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.06);
+    }
+  }
+}
+
+
+// Page Loader
+// This is just to center the spinner
+
+html, body { height: 100%; }
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Here is where the magic happens
+
+$offset: 187;
+$duration: 1.4s;
+
+.spinner {
+  animation: rotator $duration linear infinite;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+.path {
+  stroke-dasharray: $offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation:
+    dash $duration ease-in-out infinite,
+    colors ($duration*4) ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% { stroke: #4285F4; }
+  25% { stroke: #DE3E35; }
+  50% { stroke: #F7C223; }
+  75% { stroke: #1B9A59; }
+  100% { stroke: #4285F4; }
+}
+
+@keyframes dash {
+  0% { stroke-dashoffset: $offset; }
+  50% {
+    stroke-dashoffset: $offset/4;
+    transform:rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: $offset;
+    transform:rotate(450deg);
+  }
 }

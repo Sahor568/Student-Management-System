@@ -13,6 +13,7 @@ import {
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
 import { ApiConstants } from '../../../../shared/constants/api.constants';
+import { StudentService } from '../../../../shared/services/student.service';
 
 @Component({
   selector: 'app-student-list',
@@ -29,6 +30,7 @@ export class StudentList implements OnInit {
   selectedStudentId?: string;
   private dialogService = inject(DialogService);
   protected loading = signal<boolean>(false);
+  private studentService = inject(StudentService);
 
   protected tableConfig: IDataTableConfig<IStudent> = {
     columns: [
@@ -46,29 +48,19 @@ export class StudentList implements OnInit {
     this.fetchStudents();
   }
 
-  fetchStudents() {
+  private async fetchStudents() {
     this.loading.set(true);
-    this.http.get<IStudent[]>(`${ApiConstants.STUDENT}`).subscribe({
-      next: (data) =>
-        this.students.set(
-          data.map((teacher) => ({
-            ...teacher,
-          })),
-        ),
-      complete: () => {
-        this.loading.set(false);
-      },
-    });
+    this.students.set(await this.studentService.fetchAllStudents());
+    this.loading.set(false);
   }
 
-  onView(student: IStudent) {
+  protected onView(student: IStudent) {
     this.dialogService
       .open(StudentView, {
         data: student.id,
         closable: true,
-        dismissableMask: true,
-        closeOnEscape: true,
         header: 'Student Details',
+        draggable: false,
       })
       ?.onClose?.subscribe({
         next: () => {
@@ -77,27 +69,28 @@ export class StudentList implements OnInit {
       });
   }
 
-  onClick(student?: IStudent) {
-    this.dialogService.open(StudentForm, {
-      data: student?.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      header: student? 'Edit Student Details' : 'Add Student Details',
-    })
+  protected onClick(student?: IStudent) {
+    this.dialogService
+      .open(StudentForm, {
+        data: student?.id,
+        closable: true,
+        dismissableMask: true,
+        closeOnEscape: true,
+        header: student ? 'Edit Student Details' : 'Add Student Details',
+      })
       ?.onClose?.subscribe({
-      next: () => {
-        this.fetchStudents();
-      }
-    })
+        next: () => {
+          this.fetchStudents();
+        },
+      });
   }
 
-  confirmDelete(id: string) {
+  protected confirmDelete(id: string) {
     this.selectedStudentId = id;
     this.confirmDialog()?.confirm();
   }
 
-  onDeleteAccept() {
+  protected onDeleteAccept() {
     if (this.selectedStudentId !== null) {
       this.http.delete(`${ApiConstants.STUDENT}/${this.selectedStudentId}`).subscribe({
         next: () => {
