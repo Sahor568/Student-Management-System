@@ -1,4 +1,4 @@
-<div class="student-form-container">
+<div class=" p-2.5 w-[1100px] max-w-full">
   @if (loading()) {
     <div class="flex items-center justify-center w-full h-full">
       <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
@@ -8,11 +8,11 @@
 
   } @else {
     <form [formGroup]="studentForm">
-      <div class="form-card">
-
-        <div class="section-title">
+      <!-- Section 1: Basic Information -->
+      <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+        <div class="section-title flex">
           <span class="section-badge">1</span>
-          <h2>Basic Information</h2>
+          <h2 class="m-0">Basic Information</h2>
         </div>
 
         <div class="field-grid">
@@ -31,11 +31,17 @@
             <p-datePicker formControlName="dateOfAdmission" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy"
                           class="datePicker"/>
           </div>
+          <div class="field">
+            <label for="classId">Class</label>
+            <p-select [loading]="loadingClass()" [options]="classes" optionLabel="className" optionValue="classId"
+                      placeholder="Select Class" formControlName="classId"></p-select>
+          </div>
         </div>
       </div>
 
-      <div class="form-card">
-        <div class="section-title">
+      <!-- Section 2: Other Information -->
+      <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+        <div class="section-title flex">
           <span class="section-badge">2</span>
           <h2>Other Information</h2>
         </div>
@@ -80,9 +86,10 @@
         </div>
       </div>
 
-      <div class="form-card">
-        <div class="section-title">
-          <span class="section-badge">3</span>
+      <!-- Section 2: Guardian Information -->
+      <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+        <div class="section-title flex">
+          <span class="section-badge">2</span>
           <h2>Guardian Information</h2>
         </div>
         <div class="field-grid">

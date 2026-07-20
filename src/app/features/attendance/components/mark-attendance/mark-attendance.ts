@@ -1,12 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Select } from 'primeng/select';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { IStudent } from '../../../../shared/types/student.interface';
-import { ToastService } from '../../../../shared/services/toast.service';
 import { IClass } from '../../../../shared/types/class.interface';
+import { ClassService } from '../../../../shared/services/class.service';
 
 @Component({
   selector: 'app-mark-attendance',
@@ -15,12 +15,13 @@ import { IClass } from '../../../../shared/types/class.interface';
   styleUrl: './mark-attendance.scss',
 })
 export class MarkAttendance implements OnInit {
-  private router = inject(Router);
-  private toastService = inject(ToastService);
+  isEditing = false;
+  protected loading = signal<boolean>(false);
+  protected loadingList = signal<boolean>(false);
+  private classService = inject(ClassService);
 
-  allStudents: IStudent[] = [];
-  filteredStudents: IStudent[] = [];
   classes: IClass[] = [];
+  students: IStudent[] = [];
   statusOptions = [
     { label: 'Present', value: 'Present' },
     { label: 'Absent', value: 'Absent' },
@@ -28,13 +29,25 @@ export class MarkAttendance implements OnInit {
   ];
 
   attendanceForm = new FormGroup({
-    classId: new FormControl<number | null>(null, Validators.required),
-    studentId: new FormControl<string | null>(null, Validators.required),
-    date: new FormControl<Date | null>(new Date(), Validators.required),
-    status: new FormControl<string | null>(null, Validators.required),
+    classId: new FormControl(),
+    studentId: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    status: new FormControl('', Validators.required),
   });
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadClasses();
+  }
+
+  private async loadClasses(){
+    this.loadingList.set(true);
+    this.classes = await this.classService.fetchAllClasses();
+    this.loadingList.set(false);
+  }
 
   onSubmit() {}
+
+  onClassChange(classId: number) {
+
+  }
 }

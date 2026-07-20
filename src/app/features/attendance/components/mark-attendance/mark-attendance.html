@@ -1,46 +1,45 @@
-<div class="mark-attendance-container">
-  <div>
-    <h1>Mark Attendance</h1>
-    <p>Record attendance for a student</p>
-  </div>
+<div class=" p-2.5 w-[1100px] max-w-full">
+  @if (loading()) {
+    <div class="flex items-center justify-center w-full h-full">
+      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
 
-  <div>
+  } @else {
     <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
-      <div>
-        <div>
-          <label for="classId">Class:</label>
-          <p-select [options]="classes" optionLabel="className" optionValue="id" placeholder="Select Class" formControlName="classId" styleClass="w-full" />
-          @if (classes.length === 0) {
-            <span>No classes available. Add a class first.</span>
-          }
-        </div>
-        <div >
-          <label for="studentId"> Student:</label>
-          <p-select [options]="filteredStudents" optionLabel="fullName" optionValue="userId" placeholder="Select Student" formControlName="studentId" [showClear]="true" />
-          @if (!attendanceForm.value.classId) {
-            <span>
-              <i></i> Select a class first to see students
-            </span>
-          } @else if (filteredStudents.length === 0) {
-            <span>
-              <i></i> No students assigned to this class
-            </span>
-          }
-        </div>
-        <div>
-          <label for="date">Date:</label>
-          <p-datePicker formControlName="date" dateFormat="dd/mm/yy"/>
-        </div>
-        <div>
-          <label for="status">Status:</label>
-          <p-select [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status" formControlName="status" />
+      <div class="border border-[#eef0f4] rounded-[10px] shadow-[0_1px_2px_rgba(16,24,40,0.04)] py-6 px-7 mb-5">
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="classId">Class:</label>
+            <p-select appendTo="body" [loading]="loadingList()" [options]="classes" optionLabel="className" optionValue="classId"
+                      placeholder="Select Class" formControlName="classId" (onChange)="onClassChange($event.value)"></p-select>
+          </div>
+          <div class="field">
+            <label for="studentId"> Student:</label>
+            <p-select appendTo="body" [loading]="loadingList()" [options]="students" optionLabel="fullName" optionValue="userId"
+                      [placeholder]="students.length ? 'Select Student' : 'Select a class first'" formControlName="studentId"
+                      [disabled]="!attendanceForm.get('classId')?.value"></p-select>
+<!--                  this disables the student select if no class is selected-->
+          </div>
+          <div class="field">
+            <label for="date">Attendance Date<span class="required">*</span>:</label>
+            <p-datePicker appendTo="body" formControlName="date" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
+          </div>
+          <div class="field">
+            <label for="status">Status:</label>
+            <p-select appendTo="body" [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status"
+                      formControlName="status"/>
+          </div>
         </div>
       </div>
 
-      <div>
-        <p-button type="submit" label="Save Attendance" icon="pi pi-check" [disabled]="attendanceForm.invalid" />
-        <p-button type="button" label="Cancel" icon="pi pi-times" [routerLink]="['/attendance']" />
+      <div class="mark-attendance-action flex">
+        <p-button [outlined]="true" [label]="isEditing ? 'Update Attendance' : 'Save Attendance'" icon="pi pi-pencil" [disabled]="attendanceForm.invalid"/>
+        <p-button [outlined]="true" label="Cancel" icon="pi pi-times" severity="danger"
+                  [routerLink]="['/attendance']"/>
       </div>
     </form>
-  </div>
+  }
 </div>

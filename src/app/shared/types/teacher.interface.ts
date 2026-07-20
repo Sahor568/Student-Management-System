@@ -5,6 +5,7 @@ export interface ITeacher {
   fullName: string;
   phone: string;
   email: string;
+  password: string;
   status: string;
   createdDate: string;
   monthlySalary?: string;

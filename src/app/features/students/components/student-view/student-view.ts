@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { TeacherForm } from '../../../teachers/components/teacher-form/teacher-form';
+import { ClassService } from '../../../../shared/services/class.service';
 
 @Component({
   selector: 'app-student-view',
@@ -16,6 +17,7 @@ import { TeacherForm } from '../../../teachers/components/teacher-form/teacher-f
 })
 export class StudentView implements OnInit {
   student = signal<IStudent | null>(null);
+  className = signal<string | null>(null);
   config = inject(DynamicDialogConfig);
   http = inject(HttpClient);
   router = inject(Router);
@@ -25,6 +27,7 @@ export class StudentView implements OnInit {
   protected loading = signal<boolean>(false);
   private dialogRef = inject(DynamicDialogRef);
   private dialogService = inject(DialogService);
+  private classService = inject(ClassService);
 
   ngOnInit(): void {
     const studentId = this.config?.data;
@@ -34,16 +37,18 @@ export class StudentView implements OnInit {
     }
   }
 
-  protected getStudentById(studentId: string) {
+  protected async getStudentById(studentId: string) {
     this.loading.set(true);
     this.http.get<IStudent>('/students/' + studentId).subscribe({
-      next: (student) => {
+      next: async (student) => {
         this.student.set(student);
-      },
-      error: (err) => {
-        console.error('Failed to load student', err);
-      },
-      complete: () => {
+
+        const classes = await this.classService.fetchAllClasses();
+
+        const cls = classes.find((c) => Number(c.classId) === Number(student.classId));
+
+        this.className.set(cls?.className ?? null);
+
         this.loading.set(false);
       },
     });
@@ -71,10 +76,8 @@ export class StudentView implements OnInit {
     this.dialogService.open(TeacherForm, {
       data: student.id,
       closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      draggable: false,
       header: 'Edit Teacher Details',
+      draggable: false,
     });
   }
 }

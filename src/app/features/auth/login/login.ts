@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
@@ -7,6 +7,7 @@ import { ToastService } from '../../../shared/services/toast.service';
 import { Button } from 'primeng/button';
 import { HttpClient } from '@angular/common/http';
 import { ApiConstants } from '../../../shared/constants/api.constants';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +15,17 @@ import { ApiConstants } from '../../../shared/constants/api.constants';
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
-export class Login {
+export class Login implements OnInit {
   private router = inject(Router);
   private toastService = inject(ToastService);
   http = inject(HttpClient);
+  private authService = inject(AuthService);
+
+  ngOnInit() {
+    if (this.authService.getCurrentUserId() != null) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   // Form group for login form
   protected loginForm = new FormGroup({
@@ -30,25 +38,39 @@ export class Login {
 
   // Method to handle form submission
   protected onSubmit() {
-    this.http.get<any>(ApiConstants.USER).subscribe({
-      next: (res) => {
-        const user = res.find((a: any) => {
-          // Correctly check both email AND password
-          return (
-            a.email === this.loginForm.value.email && a.password === this.loginForm.value.password
-          );
-        });
+    this.http.get<any[]>(ApiConstants.USER).subscribe({
+      next: (users) => {
+        const adminUser = users.find(
+          (a) =>
+            a.email === this.loginForm.value.email && a.password === this.loginForm.value.password,
+        );
 
-        if (user) {
-          // Login successful
-          this.toastService.showToast('success', 'Login Status', 'Login successfully!'); // Show success toast message
-          localStorage.setItem('currentUserId', JSON.stringify(user.id)); // Store the current user's ID in local storage
-          localStorage.setItem('currentUserRole', JSON.stringify(user.role)); // Store the current user's ID in local storage
+        if (adminUser) {
+          this.toastService.showToast('success', 'Login Status', 'Login successfully!');
+          localStorage.setItem('currentUserId', JSON.stringify(adminUser.id));
+          localStorage.setItem('currentUserRole', JSON.stringify(adminUser.role));
           this.router.navigate(['/dashboard']);
-        } else {
-          // Invalid email or password
-          this.toastService.showToast('error', 'Login Status', 'Invalid email or password!');
+          return;
         }
+
+        this.http.get<any[]>(ApiConstants.TEACHER).subscribe({
+          next: (teachers) => {
+            const teacher = teachers.find(
+              (t) =>
+                t.email === this.loginForm.value.email &&
+                t.password === this.loginForm.value.password,
+            );
+
+            if (teacher) {
+              this.toastService.showToast('success', 'Login Status', 'Login successfully!');
+              localStorage.setItem('currentUserId', JSON.stringify(teacher.id));
+              localStorage.setItem('currentUserRole', JSON.stringify('Teacher'));
+              this.router.navigate(['/dashboard']);
+            } else {
+              this.toastService.showToast('error', 'Login Status', 'Invalid email or password!');
+            }
+          },
+        });
       },
     });
   }

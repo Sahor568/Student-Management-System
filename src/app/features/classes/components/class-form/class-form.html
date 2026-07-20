@@ -25,7 +25,7 @@
           </div>
           <div class="field">
             <label for="teacherId">Teacher</label>
-            <p-select [options]="teachers" optionLabel="fullName" optionValue="userId" placeholder="Select Teacher" formControlName="teacherId" ></p-select>
+            <p-select [loading]="loadingTeacher()" [options]="teachers" optionLabel="fullName" optionValue="userId" placeholder="Select Teacher" formControlName="teacherId" ></p-select>
           </div>
           <div class="field">
             <label for="monthlyTuitionFees">Monthly Tuition Fees:</label>

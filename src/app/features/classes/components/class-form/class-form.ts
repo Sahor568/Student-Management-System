@@ -18,6 +18,8 @@ import { ITeacher } from '../../../../shared/types/teacher.interface';
 })
 export class ClassForm implements OnInit {
   protected loading = signal<boolean>(false);
+  protected loadingTeacher = signal<boolean>(false);
+
   teachers: ITeacher[] = [];
   isEditing = false;
   private http = inject(HttpClient);
@@ -27,10 +29,12 @@ export class ClassForm implements OnInit {
   private teacherService = inject(TeacherService);
 
   classForm = new FormGroup({
+    classId: new FormControl(),
     className: new FormControl('', Validators.required),
     section: new FormControl('', Validators.required),
     teacherId: new FormControl<string | null>(null, Validators.required),
     monthlyTuitionFees: new FormControl<number | null>(null, Validators.required),
+    createdAt: new FormControl(),
   });
 
   ngOnInit(): void {
@@ -48,12 +52,7 @@ export class ClassForm implements OnInit {
     this.loading.set(true);
     this.http.get<IClass>('/classes/' + classId).subscribe({
       next: (cls) => {
-        this.classForm.patchValue({
-          className: cls.className,
-          section: cls.section,
-          teacherId: cls.teacherId,
-          monthlyTuitionFees: cls.monthlyTuitionFees,
-        });
+        this.classForm.patchValue(cls);
       },
       complete: () => {
         this.loading.set(false);
@@ -62,9 +61,9 @@ export class ClassForm implements OnInit {
   }
 
   async getAllTeacher() {
-    this.loading.set(true);
+    this.loadingTeacher.set(true);
     this.teachers = await this.teacherService.fetchAllTeachers();
-    this.loading.set(false);
+    this.loadingTeacher.set(false);
   }
 
   onSubmit() {
@@ -76,21 +75,18 @@ export class ClassForm implements OnInit {
   }
 
   createClass() {
+    let payload: any = { ...this.classForm.getRawValue() };
     this.http.get<IClass[]>('/classes').subscribe((classes) => {
       const nextId =
         classes.length > 0 ? Math.max(...classes.map((t) => Number(t.classId))) + 1 : 1;
 
-      const newClass: IClass = {
-        id: 0,
+      payload = {
+        ...payload,
         classId: nextId,
         createdAt: new Date().toISOString().split('T')[0],
-        className: this.classForm.value.className!,
-        section: this.classForm.value.section!,
-        teacherId: this.classForm.value.teacherId!,
-        monthlyTuitionFees: this.classForm.value.monthlyTuitionFees!,
       };
 
-      this.http.post<IClass>('/classes', newClass).subscribe({
+      this.http.post<IClass>('/classes', payload).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Class Status', 'Class created successfully!');
           this.dialogRef.close();
@@ -98,10 +94,11 @@ export class ClassForm implements OnInit {
       });
     });
   }
+
   editClass(): void {
     const classId = this.config?.data;
     this.http.put<IClass>(`/classes/${classId}`, this.classForm.value).subscribe({
-      next: () => {
+      next: (updated) => {
         this.toastService.showToast('success', 'Class Status', 'Class updated successfully!');
         this.dialogRef.close();
       },

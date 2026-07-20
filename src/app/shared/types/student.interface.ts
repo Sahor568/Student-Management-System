@@ -5,7 +5,9 @@ export interface IStudent {
   fullName: string;
   registrationNumber: number;
   dateOfAdmission: string;
-  // classId: number;
+  currentClass?: number;
+  classId?: number;
+  className?: string;
 
   // other information
   email: string;

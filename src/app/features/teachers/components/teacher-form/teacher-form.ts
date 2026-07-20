@@ -10,6 +10,7 @@ import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { DatePicker } from 'primeng/datepicker';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-form',
@@ -31,11 +32,13 @@ export class TeacherForm implements OnInit {
   config = inject(DynamicDialogConfig);
   private dialogRef = inject(DynamicDialogRef);
   protected loading = signal<boolean>(false);
+  private teacherId = this.config?.data;
 
   teacherForm = new FormGroup({
     userId: new FormControl(),
     fullName: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
+    password: new FormControl('', Validators.required),
     phone: new FormControl('', Validators.required),
     monthlySalary: new FormControl('', Validators.required),
     address: new FormControl(),
@@ -89,78 +92,50 @@ export class TeacherForm implements OnInit {
     this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher = teacher;
-        this.teacherForm.patchValue({
-          userId: teacher.userId,
-          fullName: teacher.fullName,
-          email: teacher.email,
-          phone: teacher.phone,
-          address: teacher.address,
-          status: teacher.status,
-          monthlySalary: teacher.monthlySalary,
-          nationalId: teacher.nationalId!,
-          education: teacher.education!,
-          religion: teacher.religion!,
-          gender: teacher.gender!,
-          bloodGroup: teacher.bloodGroup!,
-          experience: teacher.experience!,
-          dob: teacher.dob ? new Date(teacher.dob) : null,
-        });
+        this.teacherForm.patchValue(teacher);
       },
       complete: () => {
         this.loading.set(false);
-      }
+      },
     });
-
   }
 
-  onSubmit() {
+  async onSubmit(): Promise<void> {
+    let payload: any = { ...this.teacherForm.getRawValue() };
+    let api;
+
+    const getNextId = async () => {
+      const teachers = await firstValueFrom(
+        this.http.get<ITeacher[]>('/teachers'),
+      );
+      return teachers.length > 0 ? Math.max(...teachers.map((t) => Number(t.userId))) + 1 : 1;
+    };
+
     if (this.isEditing) {
-      this.editTeacher();
+      api = this.http.put<ITeacher>(`/teachers/${this.teacherId}`, payload);
     } else {
-      this.createTeacher();
-    }
-  }
-
-  createTeacher(): void {
-    this.http.get<ITeacher[]>('/teachers').subscribe((teachers) => {
-      const nextId =
-        teachers.length > 0 ? Math.max(...teachers.map((t) => Number(t.userId))) + 1 : 1;
-
-      const newTeacher: ITeacher = {
-        id: 0,
-        userId: nextId,
-        fullName: this.teacherForm.value.fullName!,
-        email: this.teacherForm.value.email!,
-        phone: this.teacherForm.value.phone!,
-        address: this.teacherForm.value.address!,
-        status: this.teacherForm.value.status!,
+      payload = {
+        ...payload,
+        userId: await getNextId(),
         createdDate: new Date().toISOString(),
-        monthlySalary: this.teacherForm.value.monthlySalary!,
-        nationalId: this.teacherForm.value.nationalId!,
-        education: this.teacherForm.value.education!,
-        religion: this.teacherForm.value.religion!,
-        gender: this.teacherForm.value.gender!,
-        bloodGroup: this.teacherForm.value.bloodGroup!,
-        experience: this.teacherForm.value.experience!,
-        dob: this.teacherForm.value.dob!,
       };
+      api = this.http.post<ITeacher>('/teachers', payload);
+    }
 
-      this.http.post<ITeacher>('/teachers', newTeacher).subscribe({
-        next: () => {
-          this.toastService.showToast('success', 'Teacher Status', 'Teacher Created successfully!');
-          this.dialogRef.close();
-        },
-      });
-    });
-  }
+    api.subscribe({
+      next: () => {
+        this.toastService.showToast(
+          'success',
+          'Success',
+          `Teacher ${this.isEditing ? 'Updated' : 'Created'} successfully!`,
+        );
 
-  editTeacher(): void {
-    const teacherId = this.config?.data;
-    this.http.put<ITeacher>(`/teachers/${teacherId}`, this.teacherForm.value).subscribe({
-      next: (updated) => {
-        this.toastService.showToast('success', 'Status', 'Teacher Updated successfully!');
         this.dialogRef.close();
+      },
+      error: (err) => {
+        this.toastService.showToast('error', err.message, 'Something went wrong!');
       },
     });
   }
 }
+

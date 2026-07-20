@@ -5,11 +5,13 @@ import { IStudent } from '../../../../shared/types/student.interface';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
 import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Select } from 'primeng/select';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../../../shared/services/toast.service';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { IClass } from '../../../../shared/types/class.interface';
+import { ClassService } from '../../../../shared/services/class.service';
 
 @Component({
   selector: 'app-student-form',
@@ -19,24 +21,28 @@ import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 })
 export class StudentForm implements OnInit {
   student!: IStudent;
+  classes: IClass[] = [];
   gender!: INameValue[];
   religion!: INameValue[];
   bloodGroup!: INameValue[];
   orphanStudent!: INameValue[];
   guardian!: INameValue[];
   router = inject(Router);
-  private route = inject(ActivatedRoute);
   isEditing = false;
   http = inject(HttpClient);
   toastService = inject(ToastService);
   config = inject(DynamicDialogConfig);
   protected loading = signal<boolean>(false);
+  private dialogRef = inject(DynamicDialogRef);
+  protected loadingClass = signal<boolean>(false);
+  private classService = inject(ClassService);
 
   studentForm = new FormGroup({
     userId: new FormControl(),
     fullName: new FormControl(),
     registrationNumber: new FormControl(),
     dateOfAdmission: new FormControl(),
+    classId: new FormControl(),
 
     email: new FormControl(),
     dob: new FormControl(),
@@ -60,6 +66,8 @@ export class StudentForm implements OnInit {
   });
 
   ngOnInit() {
+    this.getAllClass();
+
     this.gender = [
       { name: 'Male', value: 'Male' },
       { name: 'Female', value: 'Female' },
@@ -102,36 +110,21 @@ export class StudentForm implements OnInit {
       next: (student) => {
         this.student = student;
         this.studentForm.patchValue({
-          userId: student.userId,
-          fullName: student.fullName,
-          registrationNumber: student.registrationNumber,
+          ...student,
           dateOfAdmission: student.dateOfAdmission ? new Date(student.dateOfAdmission) : null,
-
-          email: student.email,
           dob: student.dob ? new Date(student.dob) : null,
-          gender: student.gender,
-          phone: student.phone,
-          address: student.address,
-          bloodGroup: student.bloodGroup,
-          orphanStudent: student.orphanStudent,
-          religion: student.religion,
-          createAt: student.createdAt,
-          updatedAt: student.updatedAt,
-
-          guardian: student.guardian,
-          guardianName: student.guardianName,
-          guardianNationalId: student.guardianNationalId,
-          guardianPhone: student.guardianPhone,
-          guardianEmail: student.guardianEmail,
-          guardianAddress: student.guardianAddress,
-          guardianProfession: student.guardianProfession,
-          guardianIncome: student.guardianIncome,
         });
       },
       complete: () => {
         this.loading.set(false);
-      }
+      },
     });
+  }
+
+  async getAllClass() {
+    this.loadingClass.set(true);
+    this.classes = await this.classService.fetchAllClasses();
+    this.loadingClass.set(false);
   }
 
   onSubmit() {
@@ -178,21 +171,19 @@ export class StudentForm implements OnInit {
       this.http.post<IStudent>('/students', newStudent).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Student Status', 'Student Created successfully!');
-          this.router.navigate(['/students']);
+          this.dialogRef.close();
         },
       });
     });
   }
 
   editStudent(): void {
-    const studentId = this.route.snapshot.paramMap.get('id');
-    this.http
-      .put<IStudent>(`/students/${studentId}`, this.studentForm.value)
-      .subscribe({
-        next: (updated) => {
-          this.toastService.showToast('success', 'Status', 'Student Updated successfully!');
-          this.router.navigate(['/students']);
-        },
-      });
+    const studentId = this.config?.data;
+    this.http.put<IStudent>(`/students/${studentId}`, this.studentForm.value).subscribe({
+      next: (updated) => {
+        this.toastService.showToast('success', 'Status', 'Student Updated successfully!');
+        this.dialogRef.close();
+      },
+    });
   }
 }

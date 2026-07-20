@@ -39,6 +39,11 @@
         </div>
 
         <div class="field">
+          <label>Class: </label>
+          <input [value]="className()" disabled/>
+        </div>
+
+        <div class="field">
           <label>Date Of Admission: </label>
           <input [value]="student()?.dateOfAdmission?.substring(0,10)" disabled/>
         </div>

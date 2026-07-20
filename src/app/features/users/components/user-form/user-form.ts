@@ -45,8 +45,8 @@ export class UserForm implements OnInit {
   ngOnInit() {
     this.role = [
       { name: 'Admin', value: 'Admin' },
-      { name: 'Teacher', value: 'Teacher' },
-      { name: 'Student', value: 'Student' },
+      // { name: 'Teacher', value: 'Teacher' },
+      // { name: 'Student', value: 'Student' },
     ];
 
     const userId = this.config?.data;
@@ -61,13 +61,7 @@ export class UserForm implements OnInit {
     this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user = user;
-        this.userForm.patchValue({
-          userId: user.userId,
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-          password: user.password,
-        });
+        this.userForm.patchValue(user)
       },
       complete: () => {
         this.loading.set(false);
@@ -90,6 +84,7 @@ export class UserForm implements OnInit {
       const newUser: IUser = {
         id: 0,
         userId: nextId,
+
         fullName: this.userForm.value.fullName!,
         email: this.userForm.value.email!,
         password: this.userForm.value.password!,

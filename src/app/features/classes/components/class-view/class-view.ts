@@ -36,27 +36,22 @@ export class ClassView implements OnInit {
     }
   }
 
-  getClassById(classId: string): void {
+  async getClassById(classId: string): Promise<void> {
     this.loading.set(true);
-    this.http.get<IClass>(`/classes/` + classId).subscribe({
-      next: (classItem) => {
+
+    this.http.get<IClass>(`/classes/${classId}`).subscribe({
+      next: async (classItem) => {
         this.class.set(classItem);
-        this.getTeacherById();
-      },
-      complete: () => {
+
+        const teachers = await this.teacherService.fetchAllTeachers();
+
+        const teacher = teachers.find((t) => Number(t.userId) === Number(classItem.teacherId));
+
+        this.teacherName.set(teacher?.fullName ?? null);
+
         this.loading.set(false);
-      },
+      }
     });
-  }
-
-  async getTeacherById() {
-    const classItem = this.class();
-
-    const teachers = await this.teacherService.fetchAllTeachers();
-
-    const teacher = teachers.find((t) => Number(t.userId) === Number(classItem?.teacherId));
-    console.log(teacher);
-    this.teacherName.set(teacher?.fullName ?? null);
   }
 
   onEdit(classItem: IClass): void {
