@@ -22,6 +22,9 @@
       class="table">
       <ng-template #header>
         <tr class="tHead">
+          <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+           S.N.
+          </th>
           @for (col of config().columns; track col.field) {
             <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
               {{ col.header }}
@@ -33,8 +36,9 @@
         </tr>
       </ng-template>
 
-      <ng-template #body let-item>
+      <ng-template #body let-item let-ri="rowIndex">
         <tr class="border-t border-gray-100 hover:bg-gray-50 transition-colors">
+          <td class="!py-3 !px-4 text-sm text-gray-700">{{ ri + 1 }}</td>
           @for (col of config().columns; track col.field) {
             <td class="!py-3 !px-4 text-sm text-gray-700">{{ item[col.field] }}</td>
           }

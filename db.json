@@ -4876,13 +4876,13 @@
   ],
   "classes": [
     {
-      "id": "fJSpzjz7AY",
       "classId": 1,
       "className": "Grade 5 - I",
       "section": "I",
-      "teacherId": "T011",
+      "teacherId": 1,
       "monthlyTuitionFees": 4593,
-      "createdAt": "2026-05-06T22:17:40.794Z"
+      "createdAt": "2026-05-06T22:17:40.794Z",
+      "id": "fJSpzjz7AY"
     },
     {
       "id": "mJHZZXAlN7",
@@ -4939,13 +4939,13 @@
       "createdAt": "2025-03-16T11:07:57.337Z"
     },
     {
-      "id": "5TxMDCcxxZ",
       "classId": 8,
       "className": "Class 1 - I",
       "section": "I",
-      "teacherId": "T013",
+      "teacherId": 1,
       "monthlyTuitionFees": 8995,
-      "createdAt": "2026-01-30T08:24:31.998Z"
+      "createdAt": "2026-01-30T08:24:31.998Z",
+      "id": "5TxMDCcxxZ"
     },
     {
       "id": "a6af1wVclv",

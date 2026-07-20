@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ThemeService } from './core/services/theme.service';
@@ -12,7 +12,7 @@ import { AuthService } from './core/services/auth.service';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
+export class App implements OnInit {
   private authService = inject(AuthService);
   private themeService = inject(ThemeService);
 
@@ -20,8 +20,11 @@ export class App {
     this.themeService.loadTheme();
   }
 
-  isLoggedIn() {
-    const currentUser = this.authService.getCurrentUserId();
-    return !!currentUser;
+  async ngOnInit() {
+    if (this.isLoggedIn()) await this.authService.fetchCurrentUser();
+  }
+
+  protected isLoggedIn() {
+    return !!this.authService.getCurrentUser();
   }
 }

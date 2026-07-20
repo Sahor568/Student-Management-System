@@ -25,7 +25,6 @@ export class TeacherList implements OnInit {
   protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   protected tableConfig: IDataTableConfig<ITeacher> = {
     columns: [
-      { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
       { field: 'email', header: 'Email' },
       { field: 'phone', header: 'Phone' },

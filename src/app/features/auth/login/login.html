@@ -55,6 +55,7 @@
         type="submit"
         label="Login"
         icon="pi pi-user"
+        [loading]="isLoading()"
         [disabled]="loginForm.invalid"
         styleClass="w-full !bg-gradient-to-br !from-[#667eea] !to-[#764ba2] !border-none !py-3 !font-semibold !rounded-[10px] hover:!opacity-90 disabled:!opacity-50"
       />
