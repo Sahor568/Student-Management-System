@@ -1,91 +1,225 @@
 .student-form-container {
   padding: 10px;
-  width: 1000px;
+  width: 1100px;
+  max-width: 100%;
+  height: 100%;
 }
 
 .form-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.form-header h1 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 0.25rem;
-}
-
-.form-header p {
-  font-size: 0.95rem;
-  color: #64748b;
-  margin: 0;
-}
-
-.card-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.student-card form {
   display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1.25rem;
+
+  .header-title {
+    flex: 1;
+    text-align: center;
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0 0 0.25rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 0;
+    display: flex;
+    height: 22px;
+    width: 22px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #475569;
+  }
 }
 
-.student-card form > div:not(.submit-container) {
+.form-card {
+  background: #ffffff;
+  border: 1px solid #eef0f4;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid #eef0f4;
+
+  .section-badge {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1e1b4b;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #4f2fc9;
+  }
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem 1.75rem;
+
+}
+
+.field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+
+  label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #64748b;
+
+    .required {
+      color: #ef4444;
+    }
+  }
 }
 
-.student-card label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #334155;
-}
+.student-card, // kept for backwards compatibility if reused elsewhere
+.form-card {
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid #dfe3ea;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 
-.student-card input[type="text"],
-.student-card input[type="number"] {
-  width: 100%;
-  padding: 0.65rem 0.85rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: #1e293b;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
-}
+    &::placeholder {
+      color: #a5abbd;
+    }
 
-.student-card input[type="text"]:focus,
-.student-card input[type="number"]:focus {
-  outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
 
-.student-card input.ng-invalid.ng-touched {
-  border-color: #ef4444;
-}
+    &.ng-invalid.ng-touched {
+      border-color: #ef4444;
 
-.student-card input.ng-invalid.ng-touched:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
-}
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+      }
+    }
+  }
 
-.student-card .p-select {
-  width: 100% !important;
+  :host ::ng-deep .p-select,
+  :host ::ng-deep .p-datepicker-input,
+  ::ng-deep .p-select {
+    width: 100% !important;
+
+    .p-select-label {
+      padding: 0.6rem 0.85rem;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+  }
 }
 
 .submit-container {
   margin-top: 0.5rem;
+
+  ::ng-deep .p-button {
+    width: 100%;
+    padding: 0.7rem;
+    font-weight: 600;
+    border-radius: 8px;
+    background: #6d4fe0;
+    border-color: #6d4fe0;
+  }
 }
 
-.submit-container .p-button {
-  width: 100%;
-  padding: 0.7rem;
-  font-weight: 600;
-  border-radius: 8px;
+
+// Page Loader
+// This is just to center the spinner
+
+html, body { height: 100%; }
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Here is where the magic happens
+
+$offset: 187;
+$duration: 1.4s;
+
+.spinner {
+  animation: rotator $duration linear infinite;
+}
+
+@keyframes rotator {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(270deg); }
+}
+
+.path {
+  stroke-dasharray: $offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation:
+    dash $duration ease-in-out infinite,
+    colors ($duration*4) ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% { stroke: #4285F4; }
+  25% { stroke: #DE3E35; }
+  50% { stroke: #F7C223; }
+  75% { stroke: #1B9A59; }
+  100% { stroke: #4285F4; }
+}
+
+@keyframes dash {
+  0% { stroke-dashoffset: $offset; }
+  50% {
+    stroke-dashoffset: $offset/4;
+    transform:rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: $offset;
+    transform:rotate(450deg);
+  }
 }

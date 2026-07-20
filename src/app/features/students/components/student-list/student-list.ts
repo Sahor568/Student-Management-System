@@ -12,6 +12,7 @@ import {
   ETableActions,
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-student-list',
@@ -26,51 +27,69 @@ export class StudentList implements OnInit {
   toastService = inject(ToastService);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedStudentId?: string;
+  private dialogService = inject(DialogService);
+  protected loading = signal<boolean>(false);
+
   protected tableConfig: IDataTableConfig<IStudent> = {
     columns: [
       { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
       { field: 'registrationNumber', header: 'Registration Number' },
       { field: 'gender', header: 'Gender' },
-      { field: 'email', header: 'email' },
+      { field: 'email', header: 'Email' },
     ],
     actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['fullName', 'email', 'registrationNumber'],
   };
-  private dialogService = inject(DialogService);
 
   ngOnInit(): void {
     this.fetchStudents();
   }
 
   fetchStudents() {
-    this.http.get<IStudent[]>('/students').subscribe({
+    this.loading.set(true);
+    this.http.get<IStudent[]>(`${ApiConstants.STUDENT}`).subscribe({
       next: (data) =>
         this.students.set(
           data.map((teacher) => ({
             ...teacher,
           })),
         ),
+      complete: () => {
+        this.loading.set(false);
+      },
     });
   }
 
   onView(student: IStudent) {
-    this.dialogService.open(StudentView, {
-      data: student.id,
-      closable: true,
-      dismissableMask: true,
-      closeOnEscape: true,
-      header: 'Student Details',
-    });
+    this.dialogService
+      .open(StudentView, {
+        data: student.id,
+        closable: true,
+        dismissableMask: true,
+        closeOnEscape: true,
+        header: 'Student Details',
+      })
+      ?.onClose?.subscribe({
+        next: () => {
+          this.fetchStudents();
+        },
+      });
   }
 
-  onEdit(student: IStudent) {
+  onClick(student?: IStudent) {
     this.dialogService.open(StudentForm, {
-      data: student.id,
+      data: student?.id,
       closable: true,
       dismissableMask: true,
       closeOnEscape: true,
-      // header: 'Edit Teacher Details',
-    });
+      header: student? 'Edit Student Details' : 'Add Student Details',
+    })
+      ?.onClose?.subscribe({
+      next: () => {
+        this.fetchStudents();
+      }
+    })
   }
 
   confirmDelete(id: string) {
@@ -80,7 +99,7 @@ export class StudentList implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedStudentId !== null) {
-      this.http.delete(`/students/${this.selectedStudentId}`).subscribe({
+      this.http.delete(`${ApiConstants.STUDENT}/${this.selectedStudentId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Student deleted successfully');
         },

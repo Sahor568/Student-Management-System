@@ -13,8 +13,10 @@
     key="user"
     [data]="users()"
     [config]="tableConfig"
+    [loading]="loading()"
+    (onAdd)="onClick()"
     (onDelete)="confirmDelete($event)"
-    (onEdit)="onEdit($event)"
+    (onEdit)="onClick($event)"
     (onView)="onView($event)"
   />
 </div>

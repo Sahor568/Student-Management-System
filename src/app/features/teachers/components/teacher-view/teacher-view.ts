@@ -1,15 +1,17 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { Component, inject, input, OnInit, signal, viewChild } from '@angular/core';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { TeacherForm } from '../teacher-form/teacher-form';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-teacher-view',
-  imports: [Button, RouterLink, ConfirmDialog],
+  imports: [Button, ConfirmDialog],
   templateUrl: './teacher-view.html',
   styleUrl: './teacher-view.scss',
 })
@@ -21,6 +23,9 @@ export class TeacherView implements OnInit {
   config = inject(DynamicDialogConfig);
   confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   selectedTeacherId?: number;
+  private dialogService = inject(DialogService);
+  private dialogRef = inject(DynamicDialogRef);
+  protected loading = signal<boolean>(false);
 
   ngOnInit(): void {
     const teacherId = this.config?.data;
@@ -31,13 +36,27 @@ export class TeacherView implements OnInit {
   }
 
   getTeacherById(teacherId: string): void {
+    this.loading.set(true);
     this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
       next: (teacher) => {
         this.teacher.set(teacher);
       },
-      error: (err) => {
-        console.error('Failed to load teacher', err);
+      complete: () => {
+        this.loading.set(false);
       },
+    });
+  }
+
+  onEdit(teacher: ITeacher) {
+    this.dialogRef.close();
+
+    this.dialogService.open(TeacherForm, {
+      data: teacher.id,
+      closable: true,
+      dismissableMask: true,
+      closeOnEscape: true,
+      draggable: false,
+      header: 'Edit Teacher Details',
     });
   }
 
@@ -48,11 +67,13 @@ export class TeacherView implements OnInit {
 
   onDeleteAccept() {
     if (this.selectedTeacherId !== null) {
-      this.http.delete(`/teachers/${this.selectedTeacherId}`).subscribe({
+      this.http.delete(`${ApiConstants.TEACHER}/${this.selectedTeacherId}`).subscribe({
         next: () => {
           this.toastService.showToast('success', 'Deleted', 'Teacher deleted successfully');
-          this.router.navigate(['/teachers']);
         },
+        complete: () => {
+          this.dialogRef.close();
+        }
       });
     }
   }

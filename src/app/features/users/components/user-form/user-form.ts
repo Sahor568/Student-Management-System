@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -10,7 +10,7 @@ import { InputText } from 'primeng/inputtext';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
 import { Select } from 'primeng/select';
 import { Button } from 'primeng/button';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../../../../shared/types/user.interface';
 import { ITeacher } from '../../../../shared/types/teacher.interface';
@@ -18,12 +18,12 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-users-form',
+  selector: 'app-user-form',
   imports: [FormsModule, ReactiveFormsModule, InputText, Select, Button],
-  templateUrl: './users-form.html',
-  styleUrl: './users-form.scss',
+  templateUrl: './user-form.html',
+  styleUrl: './user-form.scss',
 })
-export class UsersForm implements OnInit {
+export class UserForm implements OnInit {
   user?: IUser;
   isEditing = false;
   role?: INameValue[];
@@ -31,6 +31,8 @@ export class UsersForm implements OnInit {
   http = inject(HttpClient);
   toastService = inject(ToastService);
   router = inject(Router);
+  protected loading = signal<boolean>(false);
+  private dialogRef = inject(DynamicDialogRef);
 
   userForm = new FormGroup({
     userId: new FormControl(),
@@ -55,6 +57,7 @@ export class UsersForm implements OnInit {
   }
 
   private getUserById(userId: string) {
+    this.loading.set(true);
     this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user = user;
@@ -65,6 +68,9 @@ export class UsersForm implements OnInit {
           role: user.role,
           password: user.password,
         });
+      },
+      complete: () => {
+        this.loading.set(false);
       },
     });
   }
@@ -95,7 +101,7 @@ export class UsersForm implements OnInit {
       this.http.post<IUser>('/users', newUser).subscribe({
         next: () => {
           this.toastService.showToast('success', 'User Status', 'User Created successfully!');
-          this.router.navigate(['/users']);
+          this.dialogRef.close();
         },
       });
     });
@@ -103,13 +109,11 @@ export class UsersForm implements OnInit {
 
   private editTeacher() {
     const userId = this.config?.data;
-    this.http
-      .put<ITeacher>(`/users/${userId}`, this.userForm.value)
-      .subscribe({
-        next: (updated) => {
-          this.toastService.showToast('success', 'Status', 'User Updated successfully!');
-          this.router.navigate(['/users']);
-        },
-      });
+    this.http.put<ITeacher>(`/users/${userId}`, this.userForm.value).subscribe({
+      next: (updated) => {
+        this.toastService.showToast('success', 'Status', 'User Updated successfully!');
+        this.dialogRef.close();
+      },
+    });
   }
 }

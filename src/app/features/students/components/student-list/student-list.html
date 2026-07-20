@@ -13,8 +13,10 @@
     key="student"
     [data]="students()"
     [config]="tableConfig"
-    (onDelete)="confirmDelete($event)"
-    (onEdit)="onEdit($event)"
+    [loading]="loading()"
+    (onAdd)="onClick()"
     (onView)="onView($event)"
+    (onEdit)="onClick($event)"
+    (onDelete)="confirmDelete($event)"
   />
 </div>

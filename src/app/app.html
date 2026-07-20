@@ -1,6 +1,6 @@
 <p-toast position="top-right" />
 
-<div class="flex overflow-hidden">
+<div class="flex overflow-hidden bg-gray-50">
   @if (isLoggedIn()) {
     <app-sidebar />
   }
@@ -8,7 +8,7 @@
     @if (isLoggedIn()) {
       <app-header />
     }
-    <div class="m-5 overflow-auto">
+    <div class="overflow-auto" [class.m-5]="isLoggedIn()">
       <router-outlet></router-outlet>
     </div>
   </div>

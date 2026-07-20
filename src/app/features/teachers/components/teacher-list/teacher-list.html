@@ -14,9 +14,9 @@
     [data]="teachers()"
     [config]="tableConfig"
     [loading]="loading()"
-    (onDelete)="confirmDelete($event)"
-    (onEdit)="onEdit($event)"
+    (onAdd)="onClick()"
     (onView)="onView($event)"
-    (onAdd)="onAdd()"
+    (onEdit)="onClick($event)"
+    (onDelete)="confirmDelete($event)"
   />
 </div>

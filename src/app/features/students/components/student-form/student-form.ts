@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { IStudent } from '../../../../shared/types/student.interface';
@@ -30,6 +30,7 @@ export class StudentForm implements OnInit {
   http = inject(HttpClient);
   toastService = inject(ToastService);
   config = inject(DynamicDialogConfig);
+  protected loading = signal<boolean>(false);
 
   studentForm = new FormGroup({
     userId: new FormControl(),
@@ -96,6 +97,7 @@ export class StudentForm implements OnInit {
   }
 
   getStudentById(studentId: string): void {
+    this.loading.set(true);
     this.http.get<IStudent>('/students/' + studentId).subscribe({
       next: (student) => {
         this.student = student;
@@ -126,6 +128,9 @@ export class StudentForm implements OnInit {
           guardianIncome: student.guardianIncome,
         });
       },
+      complete: () => {
+        this.loading.set(false);
+      }
     });
   }
 
