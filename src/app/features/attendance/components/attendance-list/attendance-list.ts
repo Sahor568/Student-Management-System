@@ -6,12 +6,10 @@ import {
   ETableActions,
   IDataTableConfig,
 } from '../../../../shared/components/table/types/table.interface';
-import { IStudent } from '../../../../shared/types/student.interface';
-import { StudentView } from '../../../students/components/student-view/student-view';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MarkAttendance } from '../mark-attendance/mark-attendance';
-import { StudentForm } from '../../../students/components/student-form/student-form';
 import { AttendanceService } from '../../../../shared/services/attendance.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-attendance-list',
@@ -24,17 +22,18 @@ export class AttendanceList implements OnInit {
   loading = signal<boolean>(false);
   private dialogService = inject(DialogService);
   private attendanceService = inject(AttendanceService);
+  private authService = inject(AuthService);
+  private userRole = this.authService.getCurrentUser().role;
 
   protected tableConfig: IDataTableConfig<IAttendance> = {
     columns: [
-      { field: 'attendanceId', header: 'Id' },
       { field: 'studentId', header: 'Student Name' },
       { field: 'classId', header: 'Class Name' },
       { field: 'date', header: 'Attendance Date' },
       { field: 'status', header: 'Status' },
     ],
-    actions: [ETableActions.edit, ETableActions.delete],
-    searchFields: ['attendanceId', 'date', 'status'],
+    actions: this.userRole === 'Admin' ? [ETableActions.edit, ETableActions.delete] : [ETableActions.edit],
+    searchFields: ['date', 'status'],
   };
 
   ngOnInit() {
@@ -44,8 +43,8 @@ export class AttendanceList implements OnInit {
   private async fetchAttendance() {
     this.loading = signal<boolean>(true);
     this.attendance.set(await this.attendanceService.fetchAllAttendance());
-    this.loading = signal<boolean>(false);
 
+    this.loading = signal<boolean>(false);
   }
 
   protected onClick(attendance?: IAttendance) {

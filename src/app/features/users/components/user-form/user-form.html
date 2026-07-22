@@ -36,7 +36,7 @@
 
       </div>
       <div class="submit-container">
-        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+        <p-button [loading]="submitLoading()" (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
                   styleClass="w-full mx-auto" [disabled]="userForm.invalid"/>
       </div>
 

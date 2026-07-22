@@ -13,32 +13,44 @@
         <div class="field-grid">
           <div class="field">
             <label for="classId">Class:</label>
-            <p-select appendTo="body" [loading]="loadingList()" [options]="classes" optionLabel="className" optionValue="classId"
-                      placeholder="Select Class" formControlName="classId" (onChange)="onClassChange($event.value)"></p-select>
-          </div>
-          <div class="field">
-            <label for="studentId"> Student:</label>
-            <p-select appendTo="body" [loading]="loadingList()" [options]="students" optionLabel="fullName" optionValue="userId"
-                      [placeholder]="students.length ? 'Select Student' : 'Select a class first'" formControlName="studentId"
-                      [disabled]="!attendanceForm.get('classId')?.value"></p-select>
-<!--                  this disables the student select if no class is selected-->
+            <p-select appendTo="body" [loading]="loadingClass()" [options]="classes" optionLabel="className"
+                      optionValue="id"
+                      placeholder="Select Class" formControlName="classId"
+                      (onChange)="onClassChange($event.value)"></p-select>
           </div>
           <div class="field">
             <label for="date">Attendance Date<span class="required">*</span>:</label>
-            <p-datePicker appendTo="body" formControlName="date" dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" class="datePicker"/>
-          </div>
-          <div class="field">
-            <label for="status">Status:</label>
-            <p-select appendTo="body" [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status"
-                      formControlName="status"/>
+            <p-datePicker
+              appendTo="body"
+              id="date"
+              [formControl]="attendanceForm.controls.date"
+              [style]="{ width: '100%' }"
+              placeholder="Select date"
+              [showIcon]="true"
+              dateFormat="yy-mm-dd"
+              [disabled]="dateDisabled" />
           </div>
         </div>
       </div>
 
+
+      @if (students){
+        <div class="studentAttendance-list">
+          <app-table
+            key="student"
+            [data]="students"
+            [config]="tableConfig"
+            [loading]="loadingStudents()"
+            />
+        </div>
+      }
+
       <div class="mark-attendance-action flex">
-        <p-button [outlined]="true" [label]="isEditing ? 'Update Attendance' : 'Save Attendance'" icon="pi pi-pencil" [disabled]="attendanceForm.invalid"/>
+        <p-button [loading]="submitLoading()" [outlined]="true"
+                  [label]="isEditing ? 'Update Attendance' : 'Save Attendance'" icon="pi pi-pencil"
+                  [disabled]="attendanceForm.invalid" />
         <p-button [outlined]="true" label="Cancel" icon="pi pi-times" severity="danger"
-                  [routerLink]="['/attendance']"/>
+                  (onClick)="cancel()" />
       </div>
     </form>
   }

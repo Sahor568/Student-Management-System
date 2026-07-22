@@ -42,15 +42,18 @@ export class ClassView implements OnInit {
     this.http.get<IClass>(`/classes/${classId}`).subscribe({
       next: async (classItem) => {
         this.class.set(classItem);
+        console.log(classItem.teacherId);
 
         const teachers = await this.teacherService.fetchAllTeachers();
+        console.log(teachers);
 
-        const teacher = teachers.find((t) => Number(t.userId) === Number(classItem.teacherId));
+        let teacher = teachers.find((t) => t.id === classItem.teacherId);
+        console.log(teacher);
 
         this.teacherName.set(teacher?.fullName ?? null);
 
         this.loading.set(false);
-      }
+      },
     });
   }
 

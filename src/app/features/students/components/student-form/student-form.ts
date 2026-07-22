@@ -12,6 +12,8 @@ import { ToastService } from '../../../../shared/services/toast.service';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { IClass } from '../../../../shared/types/class.interface';
 import { ClassService } from '../../../../shared/services/class.service';
+import { DROPDOWN_OPTIONS } from '../../../../shared/constants/dropdownItem';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-student-form',
@@ -35,10 +37,11 @@ export class StudentForm implements OnInit {
   protected loading = signal<boolean>(false);
   private dialogRef = inject(DynamicDialogRef);
   protected loadingClass = signal<boolean>(false);
+  protected submitLoading = signal<boolean>(false);
   private classService = inject(ClassService);
+  studentId = this.config?.data;
 
   studentForm = new FormGroup({
-    userId: new FormControl(),
     fullName: new FormControl(),
     registrationNumber: new FormControl(),
     dateOfAdmission: new FormControl(),
@@ -68,34 +71,11 @@ export class StudentForm implements OnInit {
   ngOnInit() {
     this.getAllClass();
 
-    this.gender = [
-      { name: 'Male', value: 'Male' },
-      { name: 'Female', value: 'Female' },
-      { name: 'Other', value: 'Other' },
-    ];
-    this.religion = [
-      { name: 'Hindu', value: 'Hindu' },
-      { name: 'Muslim', value: 'Muslim' },
-      { name: 'Cristian', value: 'Cristian' },
-      { name: 'other', value: 'Other' },
-    ];
-    this.bloodGroup = [
-      { name: 'O+', value: 'O+' },
-      { name: 'A+', value: 'A+' },
-      { name: 'AB+', value: 'AB+' },
-      { name: 'A-', value: 'A-' },
-      { name: 'other', value: 'Other' },
-    ];
-    this.orphanStudent = [
-      { name: 'Yes', value: 'Yes' },
-      { name: 'No', value: 'No' },
-    ];
-    this.guardian = [
-      { name: 'Father', value: 'Father' },
-      { name: 'Mother', value: 'Mother' },
-      { name: 'Grand Father', value: 'Grand Father' },
-      { name: 'Grand Mother', value: 'Grand Mother' },
-    ];
+    this.gender = DROPDOWN_OPTIONS.gender;
+    this.religion = DROPDOWN_OPTIONS.religion;
+    this.bloodGroup = DROPDOWN_OPTIONS.bloodGroup;
+    this.orphanStudent = DROPDOWN_OPTIONS.orphanStudent;
+    this.guardian = DROPDOWN_OPTIONS.guardian;
 
     const studentId = this.config?.data;
     if (studentId) {
@@ -127,62 +107,33 @@ export class StudentForm implements OnInit {
     this.loadingClass.set(false);
   }
 
-  onSubmit() {
+  protected onSubmit() {
+    let payload: any = this.studentForm.getRawValue();
+    let api;
+
     if (this.isEditing) {
-      this.editStudent();
+      api = this.http.put<IStudent>(`${ApiConstants.STUDENT}/${this.studentId}`, payload);
     } else {
-      this.createStudent();
-    }
-  }
-
-  createStudent(): void {
-    this.http.get<IStudent[]>('/students').subscribe((students) => {
-      const nextId =
-        students.length > 0 ? Math.max(...students.map((s) => Number(s.userId))) + 1 : 1;
-
-      const newStudent: IStudent = {
-        id: 0,
-        userId: nextId,
-        fullName: this.studentForm.value.fullName!,
-        registrationNumber: this.studentForm.value.registrationNumber,
-        dateOfAdmission: this.studentForm.value.dateOfAdmission,
-
-        email: this.studentForm.value.email!,
-        dob: this.studentForm.value.dob,
-        phone: this.studentForm.value.phone!,
-        gender: this.studentForm.value.gender,
-        address: this.studentForm.value.address!,
-        bloodGroup: this.studentForm.value.bloodGroup,
-        orphanStudent: this.studentForm.value.orphanStudent,
-        religion: this.studentForm.value.religion,
+      payload = {
+        ...payload,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-
-        guardian: this.studentForm.value.guardian,
-        guardianName: this.studentForm.value.guardianName,
-        guardianNationalId: this.studentForm.value.guardianNationalId,
-        guardianPhone: this.studentForm.value.guardianPhone,
-        guardianEmail: this.studentForm.value.guardianEmail,
-        guardianAddress: this.studentForm.value.guardianAddress,
-        guardianProfession: this.studentForm.value.guardianProfession,
-        guardianIncome: this.studentForm.value.guardianIncome!,
       };
+      api = this.http.post<IStudent>(`${ApiConstants.STUDENT}`, payload);
+    }
 
-      this.http.post<IStudent>('/students', newStudent).subscribe({
-        next: () => {
-          this.toastService.showToast('success', 'Student Status', 'Student Created successfully!');
-          this.dialogRef.close();
-        },
-      });
-    });
-  }
-
-  editStudent(): void {
-    const studentId = this.config?.data;
-    this.http.put<IStudent>(`/students/${studentId}`, this.studentForm.value).subscribe({
-      next: (updated) => {
-        this.toastService.showToast('success', 'Status', 'Student Updated successfully!');
+    api.subscribe({
+      next: () => {
+        this.toastService.showToast(
+          'success',
+          'Success',
+          `Student ${this.isEditing ? 'Updated' : 'Created'} successfully!`,
+        );
+        this.submitLoading.set(false);
         this.dialogRef.close();
+      },
+      error: (err) => {
+        this.submitLoading.set(false);
       },
     });
   }

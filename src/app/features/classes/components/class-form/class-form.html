@@ -20,12 +20,8 @@
             <input formControlName="className" pInputText placeholder="Enter Class Name" type="text"/>
           </div>
           <div class="field">
-            <label for="section">Section</label>
-            <input formControlName="section" pInputText placeholder="Enter section Name" type="text"/>
-          </div>
-          <div class="field">
             <label for="teacherId">Teacher</label>
-            <p-select [loading]="loadingTeacher()" [options]="teachers" optionLabel="fullName" optionValue="userId" placeholder="Select Teacher" formControlName="teacherId" ></p-select>
+            <p-select [loading]="loadingTeacher()" [options]="teachers" optionLabel="fullName" optionValue="id" placeholder="Select Teacher" formControlName="teacherId" ></p-select>
           </div>
           <div class="field">
             <label for="monthlyTuitionFees">Monthly Tuition Fees:</label>
@@ -35,7 +31,7 @@
       </div>
 
       <div class="submit-container">
-        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+        <p-button [loading]="submitLoading()" (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
                   styleClass="w-full mx-auto" [disabled]="classForm.invalid"/>
       </div>
 

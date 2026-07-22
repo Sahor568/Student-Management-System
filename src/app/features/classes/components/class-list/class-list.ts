@@ -11,6 +11,7 @@ import {
 import { DialogService } from 'primeng/dynamicdialog';
 import { ClassForm } from '../class-form/class-form';
 import { ClassView } from '../class-view/class-view';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-class-list',
@@ -26,16 +27,20 @@ export class ClassList implements OnInit {
   private selectedClassId?: string;
   private dialogService = inject(DialogService);
   protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
+  private authService = inject(AuthService);
+  private userRole = this.authService.getCurrentUser().role;
 
   protected tableConfig: IDataTableConfig<IClass> = {
     columns: [
-      { field: 'classId', header: 'Id' },
       { field: 'className', header: 'Class Name' },
-      { field: 'section', header: 'Section' },
+      { field: 'teacherId', header: 'Teacher Name' },
       { field: 'monthlyTuitionFees', header: 'Monthly Fees' },
     ],
-    actions: [ETableActions.view, ETableActions.edit, ETableActions.delete],
-    searchFields: ['className', 'section'],
+    actions:
+      this.userRole === 'Admin'
+        ? [ETableActions.view, ETableActions.edit, ETableActions.delete]
+        : [ETableActions.edit],
+    searchFields: ['className'],
   };
 
   ngOnInit() {
@@ -53,7 +58,7 @@ export class ClassList implements OnInit {
       },
       complete: () => {
         this.loading.set(false);
-      }
+      },
     });
   }
 

@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { ToastService } from '../../services/toast.service';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,15 +8,16 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
-export class Sidebar {
-  private router= inject(Router);
-  private toastService = inject(ToastService);
+export class Sidebar implements OnInit {
+  private authService = inject(AuthService);
+  protected isAdmin = signal<boolean>(false);
+
+  ngOnInit() {
+     this.isAdmin.set(this.authService.isAdmin());
+  }
 
   // Logout the current user and redirect to the login page
   protected onLogout() {
-    localStorage.removeItem('currentUserId');
-    localStorage.removeItem('currentUserRole');
-    this.toastService.showToast('error', 'Logout Status', 'Logout Successfully!');
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }

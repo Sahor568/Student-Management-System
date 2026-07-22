@@ -1,4 +1,3 @@
-<!--TODO: Make this component reusable-->
 <app-confirm-dialog
   #confirmDialog
   message="Are you sure you want to delete this student?"
@@ -25,7 +24,7 @@
       <div class="field-grid grid">
         <div class="field">
           <label>Teacher ID</label>
-          <input [value]="student()?.userId" disabled/>
+          <input [value]="student()?.id" disabled/>
         </div>
 
         <div class="field">

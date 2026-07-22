@@ -13,9 +13,10 @@ import { Button } from 'primeng/button';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../../../../shared/types/user.interface';
-import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { ToastService } from '../../../../shared/services/toast.service';
 import { Router } from '@angular/router';
+import { DROPDOWN_OPTIONS } from '../../../../shared/constants/dropdownItem';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-user-form',
@@ -32,10 +33,11 @@ export class UserForm implements OnInit {
   toastService = inject(ToastService);
   router = inject(Router);
   protected loading = signal<boolean>(false);
+  protected submitLoading = signal<boolean>(false);
   private dialogRef = inject(DynamicDialogRef);
+  userId = this.config?.data;
 
   userForm = new FormGroup({
-    userId: new FormControl(),
     fullName: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -43,12 +45,7 @@ export class UserForm implements OnInit {
   });
 
   ngOnInit() {
-    this.role = [
-      { name: 'Admin', value: 'Admin' },
-      // { name: 'Teacher', value: 'Teacher' },
-      // { name: 'Student', value: 'Student' },
-    ];
-
+    this.role = DROPDOWN_OPTIONS.role;
     const userId = this.config?.data;
     if (userId) {
       this.isEditing = true;
@@ -61,7 +58,7 @@ export class UserForm implements OnInit {
     this.http.get<IUser>('/users/' + userId).subscribe({
       next: (user) => {
         this.user = user;
-        this.userForm.patchValue(user)
+        this.userForm.patchValue(user);
       },
       complete: () => {
         this.loading.set(false);
@@ -69,46 +66,33 @@ export class UserForm implements OnInit {
     });
   }
 
-  onSubmit() {
+  protected onSubmit() {
+    let payload = this.userForm.getRawValue() as IUser;
+    let api;
+
     if (this.isEditing) {
-      this.editTeacher();
-    } else {
-      this.createTeacher();
+      api = this.http.put<IUser>(`${ApiConstants.USER}/${this.userId}`, payload);
+        } else {
+      payload = {
+        ...payload
+      }
+      api = this.http.post<IUser>(`${ApiConstants.USER}`, payload)
     }
-  }
 
-  private createTeacher() {
-    this.http.get<IUser[]>('/users').subscribe((users) => {
-      const nextId = users.length > 0 ? Math.max(...users.map((t) => Number(t.userId))) + 1 : 1;
+    api.subscribe ({
+      next: () => {
+        this.toastService.showToast(
+          'success',
+          'Success',
+          `User ${this.isEditing ? 'Updated' : 'Created'} successfully!`,
 
-      const newUser: IUser = {
-        id: 0,
-        userId: nextId,
-
-        fullName: this.userForm.value.fullName!,
-        email: this.userForm.value.email!,
-        password: this.userForm.value.password!,
-        role: this.userForm.value.role!,
-      };
-
-      console.log(newUser.userId);
-
-      this.http.post<IUser>('/users', newUser).subscribe({
-        next: () => {
-          this.toastService.showToast('success', 'User Status', 'User Created successfully!');
-          this.dialogRef.close();
-        },
-      });
-    });
-  }
-
-  private editTeacher() {
-    const userId = this.config?.data;
-    this.http.put<ITeacher>(`/users/${userId}`, this.userForm.value).subscribe({
-      next: (updated) => {
-        this.toastService.showToast('success', 'Status', 'User Updated successfully!');
+    );
+        this.submitLoading.set(false);
         this.dialogRef.close();
+        },
+      error: (err) => {
+        this.submitLoading.set(false);
       },
     });
-  }
+    }
 }

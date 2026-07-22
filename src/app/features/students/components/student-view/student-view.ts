@@ -45,7 +45,7 @@ export class StudentView implements OnInit {
 
         const classes = await this.classService.fetchAllClasses();
 
-        const cls = classes.find((c) => Number(c.classId) === Number(student.classId));
+        let cls = classes.find((c) => c.id === student.classId);
 
         this.className.set(cls?.className ?? null);
 

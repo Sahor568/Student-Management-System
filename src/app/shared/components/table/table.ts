@@ -1,6 +1,5 @@
 import { Component, input, linkedSignal, output } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

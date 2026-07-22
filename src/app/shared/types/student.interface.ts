@@ -1,12 +1,10 @@
 export interface IStudent {
   // student information
   id: number;
-  userId: number;
   fullName: string;
   registrationNumber: number;
   dateOfAdmission: string;
-  currentClass?: number;
-  classId?: number;
+  classId: number;
   className?: string;
 
   // other information
