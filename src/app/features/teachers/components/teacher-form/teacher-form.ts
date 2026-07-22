@@ -10,7 +10,8 @@ import { ITeacher } from '../../../../shared/types/teacher.interface';
 import { DatePicker } from 'primeng/datepicker';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { firstValueFrom } from 'rxjs';
+import { DROPDOWN_OPTIONS } from '../../../../shared/constants/dropdownItem';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-teacher-form',
@@ -32,10 +33,10 @@ export class TeacherForm implements OnInit {
   config = inject(DynamicDialogConfig);
   private dialogRef = inject(DynamicDialogRef);
   protected loading = signal<boolean>(false);
+  protected submitLoading = signal<boolean>(false);
   private teacherId = this.config?.data;
 
   teacherForm = new FormGroup({
-    userId: new FormControl(),
     fullName: new FormControl('', Validators.required),
     email: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
@@ -53,32 +54,10 @@ export class TeacherForm implements OnInit {
   });
 
   ngOnInit(): void {
-    this.status = [
-      { name: 'Active', value: 'Active' },
-      { name: 'InActive', value: 'InActive' },
-    ];
-    this.gender = [
-      { name: 'Male', value: 'Male' },
-      { name: 'Female', value: 'Female' },
-      { name: 'Other', value: 'Other' },
-    ];
-    this.religion = [
-      { name: 'Hindu', value: 'Hindu' },
-      { name: 'Muslim', value: 'Muslim' },
-      { name: 'Cristian', value: 'Cristian' },
-      { name: 'other', value: 'Other' },
-    ];
-    this.bloodGroup = [
-      { name: 'A+', value: 'A+' },
-      { name: 'A-', value: 'A-' },
-      { name: 'B+', value: 'B+' },
-      { name: 'B-', value: 'B-' },
-      { name: 'AB+', value: 'AB+' },
-      { name: 'AB-', value: 'AB-' },
-      { name: 'O+', value: 'O+' },
-      { name: 'O-', value: 'O-' },
-      { name: 'other', value: 'Other' },
-    ];
+    this.status = DROPDOWN_OPTIONS.status;
+    this.gender = DROPDOWN_OPTIONS.gender;
+    this.religion = DROPDOWN_OPTIONS.religion;
+    this.bloodGroup = DROPDOWN_OPTIONS.bloodGroup;
 
     const teacherId = this.config?.data;
     if (teacherId) {
@@ -89,34 +68,32 @@ export class TeacherForm implements OnInit {
 
   getTeacherById(teacherId: string): void {
     this.loading.set(true);
-    this.http.get<ITeacher>('/teachers/' + teacherId).subscribe({
-      next: (teacher) => {
-        this.teacher = teacher;
-        this.teacherForm.patchValue(teacher);
-      },
-      complete: () => {
-        this.loading.set(false);
-      },
-    });
+    this.http
+      .get<ITeacher>(`${ApiConstants.TEACHER}/${this.teacherId}`)
+      .subscribe({
+        next: (teacher) => {
+          this.teacher = teacher;
+          this.teacherForm.patchValue({
+            ...teacher,
+            dob: teacher.dob ? new Date(teacher.dob) : null,
+          });
+        },
+        complete: () => {
+          this.loading.set(false);
+        },
+      });
   }
 
-  async onSubmit(): Promise<void> {
-    let payload: any = { ...this.teacherForm.getRawValue() };
+  onSubmit() {
+    this.submitLoading.set(true);
+    let payload = this.teacherForm.getRawValue() as ITeacher;
     let api;
 
-    const getNextId = async () => {
-      const teachers = await firstValueFrom(
-        this.http.get<ITeacher[]>('/teachers'),
-      );
-      return teachers.length > 0 ? Math.max(...teachers.map((t) => Number(t.userId))) + 1 : 1;
-    };
-
     if (this.isEditing) {
-      api = this.http.put<ITeacher>(`/teachers/${this.teacherId}`, payload);
+      api = this.http.put<ITeacher>(`${ApiConstants.TEACHER}/${this.teacherId}`, payload);
     } else {
       payload = {
         ...payload,
-        userId: await getNextId(),
         createdDate: new Date().toISOString(),
       };
       api = this.http.post<ITeacher>('/teachers', payload);
@@ -129,13 +106,12 @@ export class TeacherForm implements OnInit {
           'Success',
           `Teacher ${this.isEditing ? 'Updated' : 'Created'} successfully!`,
         );
-
+        this.submitLoading.set(false);
         this.dialogRef.close();
       },
       error: (err) => {
-        this.toastService.showToast('error', err.message, 'Something went wrong!');
+        this.submitLoading.set(false);
       },
     });
   }
 }
-

@@ -4,6 +4,7 @@ import { IUser } from '../../shared/types/user.interface';
 import { firstValueFrom } from 'rxjs';
 import { ApiConstants } from '../../shared/constants/api.constants';
 import { Router } from '@angular/router';
+import { ITeacher } from '../../shared/types/teacher.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,27 +22,38 @@ export class AuthService {
     return JSON.parse(localStorage.getItem(this.CURRENT_USER)!);
   }
 
-  public async fetchCurrentUser() {
-    try {
-      const userId = this.getCurrentUser().id;
+  isAdmin(): boolean {
+    return this.getCurrentUser().role === 'Admin';
+  }
 
-      let user: IUser | undefined;
-      user = await firstValueFrom(this.http.get<IUser>(`${ApiConstants.USER}/${userId}`));
-      if (!user) {
+  isTeacher(): boolean {
+    return this.getCurrentUser().role === 'Teacher';
+  }
+
+  public async fetchCurrentUser() {
+    const userId = this.getCurrentUser().id;
+    const userRole = await this.getCurrentUser().role;
+    let user: IUser | undefined;
+
+    switch (userRole.toLowerCase()) {
+      case 'admin':
+        user = await firstValueFrom(this.http.get<IUser>(`${ApiConstants.USER}/${userId}`));
+        break;
+      case 'teacher':
         const teacher = await firstValueFrom(
-          this.http.get<IUser>(`${ApiConstants.TEACHER}/${userId}`),
+          this.http.get<ITeacher>(`${ApiConstants.TEACHER}/${userId}`),
         );
         if (teacher) {
           user = { ...teacher, role: 'Teacher' };
         }
-      }
+        break;
+      default:
+        user = await firstValueFrom(this.http.get<any>(`${userRole.toLowerCase()}/${userId}`));
+    }
 
-      if (user) {
-        this.setCurrentUser(user);
-      } else {
-        this.logout();
-      }
-    } catch (err) {
+    if (user) {
+      this.setCurrentUser(user);
+    } else {
       this.logout();
     }
   }

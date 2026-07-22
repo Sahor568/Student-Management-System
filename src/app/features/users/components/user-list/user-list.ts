@@ -31,7 +31,6 @@ export class UserList implements OnInit {
   selectedUserId!: string;
   protected tableConfig: IDataTableConfig<IUser> = {
     columns: [
-      { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
       { field: 'email', header: 'Email' },
       { field: 'password', header: 'Password' },

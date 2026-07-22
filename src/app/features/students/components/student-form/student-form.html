@@ -33,7 +33,7 @@
           </div>
           <div class="field">
             <label for="classId">Class</label>
-            <p-select [loading]="loadingClass()" [options]="classes" optionLabel="className" optionValue="classId"
+            <p-select [loading]="loadingClass()" [options]="classes" optionLabel="className" optionValue="id"
                       placeholder="Select Class" formControlName="classId"></p-select>
           </div>
         </div>
@@ -132,7 +132,7 @@
       </div>
 
       <div class="submit-container">
-        <p-button (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
+        <p-button [loading]="submitLoading()" (click)="onSubmit()" label="{{ isEditing ? 'Edit' : 'Add' }}" icon="pi pi-user"
                   styleClass="w-full mx-auto" [disabled]="studentForm.invalid"/>
       </div>
 

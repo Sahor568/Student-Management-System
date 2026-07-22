@@ -1,36 +1,38 @@
-<div class="sidebar-container flex h-[calc(100vh)] bg-white ">
+<div class="sidebar-container flex h-[calc(100vh)]">
   <div class="image-container flex border-b border-gray-200">
   <img src="sms.png" alt="SMS Logo" class="sidebar-logo" />
   </div>
 
   <ul class="menu">
-    <li routerLink='/dashboard' routerLinkActive="active">
+    <li class="flex" routerLink='/dashboard' routerLinkActive="active">
       <i class="pi pi-bars" style="font-size: 1rem"></i>
       Dashboard
     </li>
-    <li routerLink='/teachers' routerLinkActive="active">
+    @if (isAdmin()){
+      <li class="flex" routerLink='/teachers' routerLinkActive="active">
       <i class="pi pi-briefcase" style="font-size: 1rem"></i>
       Teachers
     </li>
-    <li routerLink='/students' routerLinkActive="active">
+    <li class="flex" routerLink='/students' routerLinkActive="active">
       <i class="pi pi-users" style="font-size: 1rem"></i>
       Students
     </li>
-    <li routerLink='/users' routerLinkActive="active">
+    <li class="flex" routerLink='/users' routerLinkActive="active">
       <i class="pi pi-user-plus" style="font-size: 1rem"></i>
       Users
     </li>
-    <li routerLink='/classes' routerLinkActive="active">
+    }
+    <li class="flex" routerLink='/classes' routerLinkActive="active">
       <i class="pi pi-book" style="font-size: 1rem"></i>
       Classes
     </li>
-    <li routerLink='/attendance' routerLinkActive="active">
+    <li class="flex" routerLink='/attendance' routerLinkActive="active">
       <i class="pi pi-calendar-clock" style="font-size: 1rem"></i>
       Attendance
     </li>
   </ul>
 
-  <div class="logout">
+  <div class="flex" class="logout">
     <button class="btn-logout" (click)="onLogout()">
       <i class="pi pi-sign-out" style="font-size: 1rem"></i>
       Logout

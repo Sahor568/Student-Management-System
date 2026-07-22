@@ -34,7 +34,6 @@ export class StudentList implements OnInit {
 
   protected tableConfig: IDataTableConfig<IStudent> = {
     columns: [
-      { field: 'userId', header: 'Id' },
       { field: 'fullName', header: 'Full Name' },
       { field: 'registrationNumber', header: 'Registration Number' },
       { field: 'gender', header: 'Gender' },

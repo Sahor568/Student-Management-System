@@ -2,5 +2,5 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { delay } from 'rxjs/operators';
 
 export const delayInterceptor: HttpInterceptorFn = (req, next) => {
-  return next(req).pipe(delay(1500));
+  return next(req).pipe(delay(500));
 };

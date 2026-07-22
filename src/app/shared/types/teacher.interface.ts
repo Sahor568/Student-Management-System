@@ -1,19 +1,18 @@
 export interface ITeacher {
   // Basic Information
   id: number;
-  userId: number;
   fullName: string;
   phone: string;
   email: string;
   password: string;
   status: string;
-  createdDate: string;
+  createdDate?: string;
   monthlySalary?: string;
 
   // Other Information
   nationalId?: number;
   education?: string;
-  address: string;
+  address?: string;
   gender?: string;
   religion?: string;
   bloodGroup?: string;

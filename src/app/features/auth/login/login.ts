@@ -18,7 +18,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
 })
-export class Login implements OnInit {
+export class Login {
   // Form group for login form
   protected loginForm = new FormGroup({
     email: new FormControl('', [
@@ -42,8 +42,6 @@ export class Login implements OnInit {
   protected get password() {
     return this.loginForm.get('password');
   }
-
-  ngOnInit() {}
 
   // Method to handle form submission
   protected async onSubmit() {
