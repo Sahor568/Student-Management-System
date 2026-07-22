@@ -1,9 +1,10 @@
 <div>
   <div class="flex mb-5 justify-between items-center">
-    <h1 class="text-2xl font-bold text-gray-800">{{ key() + 's' | titlecase }}</h1>
+    <h1 class="text-2xl font-bold text-gray-800">{{ key() + (key().endsWith('s') ? 'es' : 's') | titlecase }}</h1>
     <div class="flex gap-4">
-      <button class="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition-colors"
-              (click)="onAdd.emit()">
+      <button
+        class="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border-2 border-indigo-500 text-indigo-600 hover:bg-indigo-50 transition-colors"
+        (click)="onAdd.emit()">
         <i class="pi pi-plus text-xs"></i>
         {{ 'Add ' + key() | titlecase }}
       </button>
@@ -22,7 +23,7 @@
       <ng-template #header>
         <tr class="tHead">
           <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-           S.N.
+            S.N.
           </th>
           @for (col of config().columns; track col.field) {
             <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -41,23 +42,26 @@
           @for (col of config().columns; track col.field) {
             <td class="!py-3 !px-4 text-sm text-gray-700">{{ item[col.field] }}</td>
           }
-          @if (key()==="attendance"){
-
-          }
           @if (config().actions?.length) {
             <td class="!py-3 !px-4">
               <div class="flex gap-2">
                 @if (config().actions?.includes(ETableActions.view)) {
-                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
-                          (click)="onView.emit(item)">View</button>
+                  <button
+                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                    (click)="onView.emit(item)">View
+                  </button>
                 }
                 @if (config().actions?.includes(ETableActions.edit)) {
-                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-300 text-indigo-600 hover:bg-indigo-50 transition-colors"
-                          (click)="onEdit.emit(item)">Edit</button>
+                  <button
+                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-300 text-indigo-600 hover:bg-indigo-50 transition-colors"
+                    (click)="onEdit.emit(item)">Edit
+                  </button>
                 }
                 @if (config().actions?.includes(ETableActions.delete)) {
-                  <button class="px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
-                          (click)="onDelete.emit(item.id)">Delete</button>
+                  <button
+                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
+                    (click)="onDelete.emit(item.id)">Delete
+                  </button>
                 }
               </div>
             </td>
@@ -68,6 +72,9 @@
       <ng-template #emptymessage>
         <tr>
           @if (loading()) {
+            <td class="!py-3 !px-4">
+              <p-skeleton width="5rem" height="1rem" borderRadius="8px" />
+            </td>
             @for (col of config().columns; track col.field) {
               <td class="!py-3 !px-4">
                 <p-skeleton width="5rem" height="1rem" borderRadius="8px" />
@@ -83,7 +90,7 @@
               </td>
             }
           } @else {
-            <td [colSpan]="config().columns.length + (config().actions?.length ? 1 : 0)">
+            <td [colSpan]="config().columns.length + (config().actions?.length ? 2 : 1)">
               <div class="flex flex-col items-center justify-center gap-3 py-12 text-center text-gray-400">
                 <i class="pi pi-inbox text-4xl"></i>
                 <span class="text-sm">No {{ key() }} found.</span>
