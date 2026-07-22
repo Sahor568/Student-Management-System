@@ -48,28 +48,31 @@ export class Login {
     this.isLoading.set(true);
     let user: IUser | undefined;
 
-    const { email, password } = this.loginForm.getRawValue();
-    const users = await firstValueFrom(this.http.get<IUser[]>(`${ApiConstants.USER}`));
-    user = users.find((user) => user.email === email && user.password === password);
+    try {
+      const { email, password } = this.loginForm.getRawValue();
+      const users = await firstValueFrom(this.http.get<IUser[]>(`${ApiConstants.USER}`));
+      user = users.find((user) => user.email === email && user.password === password);
 
-    if (!user) {
-      const teachers = await firstValueFrom(this.http.get<ITeacher[]>(ApiConstants.TEACHER));
-      const teacher = teachers.find(
-        (teacher) => teacher.email === email && teacher.password === password,
-      );
+      if (!user) {
+        const teachers = await firstValueFrom(this.http.get<ITeacher[]>(ApiConstants.TEACHER));
+        const teacher = teachers.find(
+          (teacher) => teacher.email === email && teacher.password === password,
+        );
 
-      if (teacher) {
-        user = { ...teacher, role: 'Teacher' };
+        if (teacher) {
+          user = { ...teacher, role: 'Teacher' };
+        }
       }
-    }
 
-    if (user) {
-      this.toastService.showToast('success', 'Login Status', 'Login successfully!');
-      this.authService.setCurrentUser(user);
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.toastService.showToast('error', 'Login Failed', 'Invalid email or password!');
+      if (user) {
+        this.toastService.showToast('success', 'Login Status', 'Login successfully!');
+        this.authService.setCurrentUser(user);
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.toastService.showToast('error', 'Login Failed', 'Invalid email or password!');
+      }
+    } finally {
+      this.isLoading.set(false);
     }
-    this.isLoading.set(false);
   }
 }
