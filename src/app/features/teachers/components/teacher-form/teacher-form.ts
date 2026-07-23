@@ -53,7 +53,7 @@ export class TeacherForm implements OnInit {
     dob: new FormControl(),
   });
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.status = DROPDOWN_OPTIONS.status;
     this.gender = DROPDOWN_OPTIONS.gender;
     this.religion = DROPDOWN_OPTIONS.religion;
@@ -66,7 +66,7 @@ export class TeacherForm implements OnInit {
     }
   }
 
-  getTeacherById(teacherId: string): void {
+  getTeacherById(teacherId: string){
     this.loading.set(true);
     this.http
       .get<ITeacher>(`${ApiConstants.TEACHER}/${this.teacherId}`)

@@ -10,6 +10,10 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MarkAttendance } from '../mark-attendance/mark-attendance';
 import { AttendanceService } from '../../../../shared/services/attendance.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
+import { IClass } from '../../../../shared/types/class.interface';
+import { HttpClient } from '@angular/common/http';
+import { ITeacher } from '../../../../shared/types/teacher.interface';
 
 @Component({
   selector: 'app-attendance-list',
@@ -18,33 +22,52 @@ import { AuthService } from '../../../../core/services/auth.service';
   styleUrl: './attendance-list.scss',
 })
 export class AttendanceList implements OnInit {
-  attendance = signal<IAttendance[]>([]);
+  attendances = signal<IAttendance[]>([]);
   loading = signal<boolean>(false);
+  private http = inject(HttpClient);
   private dialogService = inject(DialogService);
-  private attendanceService = inject(AttendanceService);
   private authService = inject(AuthService);
-  private userRole = this.authService.getCurrentUser().role;
+  private userRole = this.authService.isTeacher();
 
   protected tableConfig: IDataTableConfig<IAttendance> = {
     columns: [
-      { field: 'studentId', header: 'Student Name' },
-      { field: 'classId', header: 'Class Name' },
+      { field: 'className', header: 'Class Name' },
       { field: 'date', header: 'Attendance Date' },
+      { field: 'teacherName', header: 'Teacher Assigned' },
       { field: 'status', header: 'Status' },
     ],
-    actions: this.userRole === 'Admin' ? [ETableActions.edit, ETableActions.delete] : [ETableActions.edit],
-    searchFields: ['date', 'status'],
+    actions: this.userRole ? [ETableActions.edit] : [ETableActions.edit, ETableActions.delete],
+    searchFields: ['className', 'teacherName'],
   };
 
   ngOnInit() {
     this.fetchAttendance();
   }
 
-  private async fetchAttendance() {
-    this.loading = signal<boolean>(true);
-    this.attendance.set(await this.attendanceService.fetchAllAttendance());
-
-    this.loading = signal<boolean>(false);
+  private fetchAttendance() {
+    this.loading.set(true);
+    this.http.get<IAttendance[]>(`${ApiConstants.ATTENDANCE}`).subscribe({
+      next: (attendances) => {
+        this.http.get<IClass[]>(`${ApiConstants.CLASS}`).subscribe({
+          next: (classes) => {
+            const classMap = new Map(classes.map((c) => [c.id, c.className]));
+            const mapped = attendances.map((attendance) => ({
+              ...attendance,
+              className: classMap.get(attendance.classId) ?? '',
+            }));
+            this.attendances.set(mapped);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.attendances.set(attendances);
+            this.loading.set(false);
+          },
+        });
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
   }
 
   protected onClick(attendance?: IAttendance) {

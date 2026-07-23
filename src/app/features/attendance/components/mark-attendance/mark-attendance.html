@@ -89,7 +89,7 @@
                 <td [colSpan]="tableConfig.columns.length + 1">
                   <div class="flex flex-col items-center justify-center gap-3 py-12 text-center text-gray-400">
                     <i class="pi pi-inbox text-4xl"></i>
-                    <span class="text-sm">No Attendance found.</span>
+                    <span class="text-sm">Select Class First.</span>
                   </div>
                 </td>
               }
@@ -98,7 +98,7 @@
         </p-table>
       </div>
 
-      <div class="mark-attendance-action flex">
+      <div class="mark-attendance-action flex m-2">
         <p-button [loading]="submitLoading()" [outlined]="true"
                   [label]="isEditing ? 'Update Attendance' : 'Save Attendance'" icon="pi pi-pencil"
                   [disabled]="attendanceForm.invalid" />

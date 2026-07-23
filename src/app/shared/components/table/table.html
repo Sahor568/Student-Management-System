@@ -22,45 +22,51 @@
       class="table">
       <ng-template #header>
         <tr class="tHead">
-          <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <th class="!py-3 !px-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
             S.N.
           </th>
           @for (col of config().columns; track col.field) {
-            <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <th class="!py-3 !px-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">
               {{ col.header }}
             </th>
           }
           @if (config().actions?.length) {
-            <th class="!py-3 !px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+            <th class="!py-3 !px-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
           }
         </tr>
       </ng-template>
 
       <ng-template #body let-item let-ri="rowIndex">
         <tr class="border-t border-gray-100 hover:bg-gray-50 transition-colors">
-          <td class="!py-3 !px-4 text-sm text-gray-700">{{ ri + 1 }}</td>
+          <td class="!py-3 !px-4 text-sm text-gray-700 ">{{ ri + 1 }}</td>
           @for (col of config().columns; track col.field) {
             <td class="!py-3 !px-4 text-sm text-gray-700">{{ item[col.field] }}</td>
           }
           @if (config().actions?.length) {
             <td class="!py-3 !px-4">
-              <div class="flex gap-2">
+              <div class="flex gap-3">
                 @if (config().actions?.includes(ETableActions.view)) {
                   <button
-                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
-                    (click)="onView.emit(item)">View
+                    class="w-8 h-8 flex items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors"
+                    title="View"
+                    (click)="onView.emit(item)">
+                    <i class="pi pi-eye text-sm"></i>
                   </button>
                 }
                 @if (config().actions?.includes(ETableActions.edit)) {
                   <button
-                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-300 text-indigo-600 hover:bg-indigo-50 transition-colors"
-                    (click)="onEdit.emit(item)">Edit
+                    class="w-8 h-8 flex items-center justify-center rounded-md text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                    title="Edit"
+                    (click)="onEdit.emit(item)">
+                    <i class="pi pi-pencil text-sm"></i>
                   </button>
                 }
                 @if (config().actions?.includes(ETableActions.delete)) {
                   <button
-                    class="px-3 py-1.5 text-xs font-medium rounded-md border border-red-300 text-red-600 hover:bg-red-50 transition-colors"
-                    (click)="onDelete.emit(item.id)">Delete
+                    class="w-8 h-8 flex items-center justify-center rounded-md text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                    title="Delete"
+                    (click)="onDelete.emit(item.id)">
+                    <i class="pi pi-trash text-sm"></i>
                   </button>
                 }
               </div>

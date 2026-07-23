@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { Button } from 'primeng/button';
+import { Component } from '@angular/core';
 import { ClassList } from './components/class-list/class-list';
 
 @Component({

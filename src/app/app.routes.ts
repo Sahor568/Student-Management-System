@@ -9,9 +9,11 @@ import { Attendance } from './features/attendance/attendance';
 import { authGuard } from './shared/guards/auth.guard';
 import { loginGuard } from './shared/guards/login.guard';
 import { roleGuard } from './shared/guards/role-guard';
+import { NotFound } from './shared/components/not-found/not-found';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'error', component: NotFound },
   { path: 'login', component: Login, canActivate: [loginGuard] },
   {
     path: 'dashboard',

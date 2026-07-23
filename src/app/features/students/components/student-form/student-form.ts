@@ -84,7 +84,7 @@ export class StudentForm implements OnInit {
     }
   }
 
-  getStudentById(studentId: string): void {
+  getStudentById(studentId: string) {
     this.loading.set(true);
     this.http.get<IStudent>('/students/' + studentId).subscribe({
       next: (student) => {
@@ -112,12 +112,15 @@ export class StudentForm implements OnInit {
     let api;
 
     if (this.isEditing) {
+      payload = {
+        ...payload,
+        updatedAt: new Date().toISOString(),
+      };
       api = this.http.put<IStudent>(`${ApiConstants.STUDENT}/${this.studentId}`, payload);
     } else {
       payload = {
         ...payload,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
       };
       api = this.http.post<IStudent>(`${ApiConstants.STUDENT}`, payload);
     }

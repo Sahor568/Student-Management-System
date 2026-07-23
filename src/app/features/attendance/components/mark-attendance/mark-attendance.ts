@@ -17,9 +17,12 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { DROPDOWN_OPTIONS } from '../../../../shared/constants/dropdownItem';
 import { INameValue } from '../../../../shared/types/name-Value.interface';
 import { ETableActions } from '../../../../shared/components/table/types/table.interface';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Skeleton } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
+import { IAttendance } from '../../../../shared/types/attendance.interface';
+import { HttpClient } from '@angular/common/http';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 interface StudentAttendance {
   student: IStudent;
@@ -34,6 +37,7 @@ interface StudentAttendance {
   styleUrl: './mark-attendance.scss',
 })
 export class MarkAttendance implements OnInit {
+  attendance!: IAttendance;
   isEditing = false;
   dateDisabled = false;
   authService = inject(AuthService);
@@ -43,12 +47,6 @@ export class MarkAttendance implements OnInit {
   studentAttendances: StudentAttendance[] = [];
   attendanceService = inject(AttendanceService);
   status!: INameValue[];
-  attendanceForm = new FormGroup({
-    classId: new FormControl(),
-    studentId: new FormControl('', Validators.required),
-    date: new FormControl('', Validators.required),
-    status: new FormControl('', Validators.required),
-  });
   protected tableConfig = {
     columns: [
       { field: 'fullName', header: 'Full Name' },
@@ -68,6 +66,18 @@ export class MarkAttendance implements OnInit {
   protected readonly ETableActions = ETableActions;
   private classService = inject(ClassService);
   private dialogRef = inject(DynamicDialogRef);
+  config = inject(DynamicDialogConfig);
+  // attendanceId = this.config?.data;
+  http = inject(HttpClient);
+
+
+  attendanceForm = new FormGroup({
+    classId: new FormControl(),
+    studentId: new FormControl('', Validators.required),
+    date: new FormControl(),
+    status: new FormControl('', Validators.required),
+  });
+
 
   ngOnInit() {
     this.loadClasses();
@@ -76,12 +86,34 @@ export class MarkAttendance implements OnInit {
     if (this.userRole === 'Teacher') {
       this.dateDisabled = true;
     }
+
+    const attendanceId = this.config?.data;
+    if(attendanceId) {
+      this.isEditing = true;
+      this.getAttendanceById(attendanceId);
+    }
   }
 
   private async loadClasses() {
     this.loadingClass.set(true);
     this.classes = await this.classService.fetchAllClasses();
     this.loadingClass.set(false);
+  }
+
+  protected getAttendanceById(attendanceId: string) {
+    this.loading.set(true);
+    this.http.get<IAttendance>(`${ApiConstants.ATTENDANCE}/${attendanceId}`).subscribe({
+      next: (attendance) => {
+        this.attendance = attendance;
+        this.attendanceForm.patchValue({
+          // ...attendance,
+          // date: attendance.date ? new Date(attendance.date) : null,
+        });
+      },
+      complete:() => {
+        this.loadingClass.set(false);
+      }
+    });
   }
 
   onSubmit() {
@@ -96,15 +128,9 @@ export class MarkAttendance implements OnInit {
       this.studentAttendances = [];
       return;
     }
-
     this.loadingStudents.set(true);
     this.students.set(await this.attendanceService.getStudentByClass(classId));
-    // this.studentAttendances = this.students.map((student) => ({
-    //   student,
-    //   status: 'Present',
-    // }));
     this.loadingStudents.set(false);
-
     await this.loadExistingAttendance();
   }
 

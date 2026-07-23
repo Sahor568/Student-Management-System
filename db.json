@@ -1458,6 +1458,62 @@
       "date": "2026-07-21",
       "status": "Present",
       "id": "G-r2v7FMQc4"
+    },
+    {
+      "studentId": "N8CFwafhDk",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-23",
+      "status": "Absent",
+      "id": "t9YV2ol48LE"
+    },
+    {
+      "studentId": "iajETxHnzb",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-23",
+      "status": "Present",
+      "id": "o556kbVlhb0"
+    },
+    {
+      "studentId": "sRCFwBpIis",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-23",
+      "status": "Present",
+      "id": "2uI_lByB5Uc"
+    },
+    {
+      "studentId": "ptnlGV7a6Y",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-23",
+      "status": "Present",
+      "id": "XJO3heSai80"
+    },
+    {
+      "studentId": "N8CFwafhDk",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-25",
+      "status": "Late",
+      "id": "fri6KFRZnao"
+    },
+    {
+      "studentId": "iajETxHnzb",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-25",
+      "status": "Late",
+      "id": "12Sp1qcz9Tk"
+    },
+    {
+      "studentId": "sRCFwBpIis",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-25",
+      "status": "Present",
+      "id": "kTRcvDfDNbA"
+    },
+    {
+      "studentId": "ptnlGV7a6Y",
+      "classId": "mJHZZXAlN7",
+      "date": "2026-07-25",
+      "status": "Present",
+      "id": "ruRAmIlAZRY"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

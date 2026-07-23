@@ -12,6 +12,8 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ClassForm } from '../class-form/class-form';
 import { ClassView } from '../class-view/class-view';
 import { AuthService } from '../../../../core/services/auth.service';
+import { ITeacher } from '../../../../shared/types/teacher.interface';
+import { ApiConstants } from '../../../../shared/constants/api.constants';
 
 @Component({
   selector: 'app-class-list',
@@ -28,19 +30,18 @@ export class ClassList implements OnInit {
   private dialogService = inject(DialogService);
   protected confirmDialog = viewChild<ConfirmDialog>('confirmDialog');
   private authService = inject(AuthService);
-  private userRole = this.authService.getCurrentUser().role;
+  private userRole = this.authService.isTeacher();
 
   protected tableConfig: IDataTableConfig<IClass> = {
     columns: [
       { field: 'className', header: 'Class Name' },
-      { field: 'teacherId', header: 'Teacher Name' },
+      { field: 'teacherName', header: 'Teacher Assigned' },
       { field: 'monthlyTuitionFees', header: 'Monthly Fees' },
     ],
-    actions:
-      this.userRole === 'Admin'
-        ? [ETableActions.view, ETableActions.edit, ETableActions.delete]
-        : [ETableActions.edit],
-    searchFields: ['className'],
+    actions: this.userRole
+      ? [ETableActions.view]
+      : [ETableActions.view, ETableActions.edit, ETableActions.delete],
+    searchFields: ['className', 'teacherName'],
   };
 
   ngOnInit() {
@@ -49,14 +50,25 @@ export class ClassList implements OnInit {
 
   fetchClasses() {
     this.loading.set(true);
-    this.http.get<IClass[]>('/classes').subscribe({
-      next: (data) => {
-        this.classes.set(data);
+    this.http.get<IClass[]>(`${ApiConstants.CLASS}`).subscribe({
+      next: (classes) => {
+        this.http.get<ITeacher[]>(`${ApiConstants.TEACHER}`).subscribe({
+          next: (teachers) => {
+            const teacherMap = new Map(teachers.map((t) => [t.id, t.fullName]));
+            const mapped = classes.map((c) => ({
+              ...c,
+              teacherName: teacherMap.get(c.teacherId) ?? 'Not Assigned...',
+            }));
+            this.classes.set(mapped);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.classes.set(classes);
+            this.loading.set(false);
+          },
+        });
       },
-      error: (err) => {
-        this.toastService.showToast('error', 'Failed', err.message);
-      },
-      complete: () => {
+      error: () => {
         this.loading.set(false);
       },
     });

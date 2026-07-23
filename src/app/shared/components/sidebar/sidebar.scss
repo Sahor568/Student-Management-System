@@ -1,16 +1,4 @@
-.sidebar-container {
-  flex-direction: column;
-  width: 256px;
-  border-right: 1px solid #e5e5e5;
-}
-
-.menu {
-  list-style: none;
-  flex: 1;
-}
-
 .menu li {
-  display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px 16px;

@@ -1,1 +1,10 @@
+{ field: 'teacherName', header: 'Teacher Assigned' } ---- attendance-list
+TODO: Here I have to put teacher assigned in the class
+{ field: 'status', header: 'Status' } ---- attendance-list
+TODO: Here should be status of total % of presentTODO: error page without sidebar and header
 
+TODO: error page without sidebar and header
+TODO: mark attendance list correction to show combined in a class with student
+TODO: mark attendance add edit should work
+TODO: Dashboard loading one by one
+TODO: SideBar using PrimeNG
